@@ -1,0 +1,40 @@
+nn:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Godkjenning mislyktes: %{errors}'
+      models:
+        user:
+          attributes:
+            email:
+              taken: "e-post er ugyldig"
+              blank: "e-post kan ikke blankt"
+            telephone:
+              taken: "telefonen er ugyldig"
+              blank: "telefonen kan ikke blankt"
+              invalid: "telefonen bare tillatt NUMBER"
+            username:
+              taken: "brukernavnet er ugyldig"
+              blank: "brukernavnet kan ikke blankt"
+            first_name:
+              blank: "fornavn kan ikke blankt"
+            last_name:
+              blank: "etternavn kan ikke blankt"
+            profession_id:
+              blank: "yrket kan ikke blankt"
+        help_request:
+          attributes:
+            description:
+              blank: "beskrivelse kan ikke bli tom"
+            distance_scope:
+              blank: "avstand kan ikke bli tom"
+            price:
+              not_a_number: "pris ikke et tall"
+              blank: "pris kan ikke bli tom"
+            latitude:
+              blank: "breddegrad kan ikke bli tom"
+            longitude:
+              blank: "lengdegrad kan ikke bli tom"
+
+  payment_create: "Betalt til SAVER for tilgang til dine hjelpere Husk å betale din hjelper også Lykke til med hjelpen!"
+  payment_success: "Betalingen til SAVER er utført!"

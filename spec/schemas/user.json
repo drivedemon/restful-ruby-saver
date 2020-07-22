@@ -1,0 +1,25 @@
+{
+  "id": "file:/user.json",
+  "type": "object",
+  "required": [
+    "id", "email", "first_name", "last_name", "telephone", "username"
+  ],
+  "properties": {
+    "id": { "type": "number" },
+    "email": { "type": "string" },
+    "first_name": { "type": "string" },
+    "last_name": { "type": "string" },
+    "telephone": { "type": "string" },
+    "username": { "type": "string" },
+    "image_key": { "type": "string" },
+    "image_path": { "type": "string" },
+    "profession": { "$ref": "file:/profession.json#" },
+    "notification_status": { "type": "boolean" },
+    "notification_status_green": { "type": "boolean" },
+    "notification_status_yellow": { "type": "boolean" },
+    "notification_status_red": { "type": "boolean" },
+    "green_distance_scope": { "type": "number" },
+    "yellow_distance_scope": { "type": "number" },
+    "red_distance_scop": { "type": "number" }
+  }
+}

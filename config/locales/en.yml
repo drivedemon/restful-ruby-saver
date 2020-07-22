@@ -1,0 +1,40 @@
+en:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validation failed: %{errors}'
+      models:
+        user:
+          attributes:
+            email:
+              taken: "Email is invalid"
+              blank: "Email can not blank"
+            telephone:
+              taken: "Telephone is invalid"
+              blank: "Telephone can not blank"
+              invalid: "Telephone sign allowed only NUMBER"
+            username:
+              taken: "Username is invalid"
+              blank: "Username can not blank"
+            first_name:
+              blank: "first_name can not blank"
+            last_name:
+              blank: "last_name can not blank"
+            profession_id:
+              blank: "profession can not blank"
+        help_request:
+          attributes:
+            description:
+              blank: "Description can not blank"
+            distance_scope:
+              blank: "Distance can not blank"
+            price:
+              not_a_number: "Price not a number"
+              blank: "Price can not blank"
+            latitude:
+              blank: "Latitude can not blank"
+            longitude:
+              blank: "Longitude can not blank"
+
+  payment_create: "Paid to SAVER for see offered on your help request!"
+  payment_success: "Paid to SAVER successfully!"

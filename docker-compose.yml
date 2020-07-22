@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:10
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: 'trust'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+volumes:
+  data:

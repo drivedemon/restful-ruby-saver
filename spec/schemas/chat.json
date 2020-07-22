@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "required": [
+    "id", "message", "image", "latitude", "longitude", "created_at", "user"
+  ],
+  "properties": {
+    "id": { "type": "number" },
+    "message": { "type": ["string", "null"] },
+    "image": { "type": ["string", "null"] },
+    "latitude": { "type": "number" },
+    "longitude": { "type": "number" },
+    "user": { "$ref": "file:/user.json#" }
+  }
+}
