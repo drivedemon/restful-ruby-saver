@@ -1,6 +1,6 @@
 ARG HOME=/home/app
 
-FROM ruby:2.7.1-alpine AS build
+FROM ruby:2.7.1-alpine AS build  
 
 # nodejs + yarn
 RUN apk add build-base nodejs yarn postgresql-dev tzdata
