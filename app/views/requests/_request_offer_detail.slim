@@ -1,0 +1,21 @@
+- @help_request.offer_requests.each do |offer_request|
+  tr
+    td.image-with-name
+      - if offer_request.user.image_path.present?
+        .avatar-image style="background-image: url(#{offer_request.user.image_path})"
+      - else
+        .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+      = offer_request.user.full_name
+    td.text-center = offer_request.user.email
+    td.text-center = "#{total_amount_of_user(offer_request.user.offer_requests_accepted.pluck(:price))} kr"
+    td.text-center = "#{total_amount_of_user(offer_request.user.help_requests.pluck(:price))} kr"
+    td.text-center
+      span x-html="getRatingStar(#{offer_request.user.rates.average(:score).to_i})"
+      span.font-weight-bold.ml-1 = offer_request.user.rates.average(:score).to_i
+    td.text-center
+      span class="status status--#{offer_request.user.status}"
+        = offer_request.user.status
+    td.text-center
+      a href="javascript:void(0)"
+        = link_to request_history_customers_path(offer_request.user) do
+          = image_tag asset_path("icons/icon-view.png"), height: "20", class: "mr-2"

@@ -1,0 +1,14 @@
+table.table.table-card
+  thead
+    tr
+      th = t("dashboard.request_customer.level")
+      th = t("dashboard.request_customer.date_time")
+      th = t("dashboard.request_customer.description")
+      th = t("dashboard.request_customer.amount")
+      th = t("dashboard.dashboard_user.requester")
+      th = t("dashboard.request_customer.status")
+  tbody.offer-request-histories id = "offer-request-histories"
+    = render "customer_offer_request_history_data"
+#paginator
+  - unless @offer_request_histories.total_pages == @offer_request_histories.current_page || @offer_request_histories.count == 0
+    = link_to t("dashboard.button.load_more"), request.params.except(:controller,:action,:locale).merge(page: @offer_request_histories.current_page+1), id: "load-more-offer-histories", remote: true

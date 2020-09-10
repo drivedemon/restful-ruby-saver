@@ -18,13 +18,3 @@ HelperRequestStatus.create(
     { name: 'Cancel' }
   ]
 )
-
-HelpRequestStatus.create(
-  [
-    { name: 'Pending' },
-    { name: 'Confirm' },
-    { name: 'Complete' },
-    { name: 'Reject' },
-    { name: 'Cancel' }
-  ]
-)

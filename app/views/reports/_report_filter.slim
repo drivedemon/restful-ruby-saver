@@ -1,0 +1,21 @@
+.row.filter-row.align-items-center x-data="tableFilter()"
+  .col-4
+    h5.user-count
+      = t("dashboard.dashboard_user.showing_users", number: @total_reports_count)
+  .col-8
+    .filter-list
+      span
+        = t("dashboard.dashboard_user.filter_by")
+      .filter-box
+        select.reason-filter x-model="reason" @change="appendQueryUrl"
+          option[value="" name="reason"] Reason
+          option[value="1" name="spam"] = t("dashboard.button.spam")
+          option[value="2" name="pretending"] = t("dashboard.button.pretending")
+          option[value="3" name="hateful"] = t("dashboard.button.hateful")
+          option[value="4" name="other"] = t("dashboard.button.other")
+      .filter-box#datepicker
+        span.datepicker-input = t("dashboard.button.date_time")
+      .filter-box
+        = select_tag :reported_by_user_id, options_from_collection_for_select(@reported_by, :id, :full_name), class: 'report-filter', include_blank: t("dashboard.report.reported_by")
+      .filter-box @click="clearFilter"
+        | X

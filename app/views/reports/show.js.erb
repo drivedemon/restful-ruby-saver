@@ -1,0 +1,7 @@
+$("<%= escape_javascript(render "report_detail", report_history: @report_history) %>").appendTo("#report-histories");
+
+<% if @report_history.total_pages == @report_history.current_page %>
+  $("#load-more-report-histories").hide();
+<% else %>
+  $("#load-more-report-histories").attr("href", "<%== report_path(request.params.except(:controller,:action,:locale).merge(page: @report_history.current_page+1)) %>");
+<% end %>

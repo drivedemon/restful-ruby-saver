@@ -1,0 +1,35 @@
+.container x-data="tableFilter()"
+  = render "spending_history_header"
+  = render "spending_history_filter"
+
+  table.table.table-card id="spending-histories-table"
+    thead
+      tr
+        th
+          a href="javascript:void(0)" @click="selectAllCheckbox('spending-histories')" x-show="!isSelectAll"
+            = image_tag asset_path("icons/checkbox-empty.png"), height: "20"
+          a href="javascript:void(0)" @click="selectAllCheckbox('spending-histories')" x-show="isSelectAll"
+            = image_tag asset_path("icons/checkbox-checked.png"), height: "20"
+        th = t("dashboard.earning_history.payment_number")
+        th = t("dashboard.dashboard_user.name")
+        th = t("dashboard.request_customer.date_time")
+        th = t("dashboard.request_customer.amount")
+        th = t("dashboard.request_customer.description")
+        th = t("dashboard.request_customer.status")
+    tbody.spending-history id = "spending-histories"
+      = render "spending_history"
+
+  #paginator
+    - unless @spending_histories.total_pages == @spending_histories.current_page || @spending_histories.count == 0
+      = link_to t("dashboard.dashboard_user.load_more"), spending_histories_path(request.params.except(:controller,:action,:locale).merge(page: (@spending_histories.current_page+1))), id: "load-more-spending-histories", remote: true
+
+
+  .item-selection-box :class="{'show': selectedDataList.length}"
+    .row.align-items-center
+      .col-6
+        a href="javascript:void(0)" class="close-btn mr-3" @click="clearSelectAll"
+          | X
+        span x-text="`${selectedDataList.length} items selected`"
+      .col-6.text-right
+        btn class="btn btn-round btn-round--dark mr-3" @click="exportSelectedList('#{export_csv_spending_histories_path}')"
+          = t("dashboard.button.export")

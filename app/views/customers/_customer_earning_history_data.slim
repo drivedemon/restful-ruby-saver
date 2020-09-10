@@ -1,0 +1,16 @@
+- @earning_histories.each do |earning_history|
+  tr
+    td = earning_history.payment.order_id
+    td.image-with-name
+      - user = earning_history.user
+      - if user.image_path.present?
+        .avatar-image style="background-image: url(#{user.image_path})"
+      - else
+        .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+      = user.full_name
+    td = format_date_time_view(earning_history.payment.created_at)
+    td = format_currency(earning_history.price)
+    td.table__description = earning_history.description
+    td
+      span class="status status--#{earning_history.status}"
+        = earning_history.status

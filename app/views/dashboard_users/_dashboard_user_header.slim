@@ -1,0 +1,6 @@
+.row.heading
+  .col-8
+    h2 = t("dashboard.navbar.profile_management")
+  .col-4.text-right
+    - if can? :create, :dashboard_user
+      = link_to t("dashboard.dashboard_user.create_new_user"), new_dashboard_user_path, class: "btn btn-success"

@@ -1,12 +1,15 @@
 class Api::User::SessionsController < Api::User::ApplicationController
   skip_before_action :set_current_user_from_header, only: [:sign_up, :sign_in]
+  skip_before_action :check_banned_user, only: [:sign_up, :sign_in]
 
   include MergeImageParam
+  include DashboardNotificationTrigger
 
   def sign_up
     # merge_image_param
     user = User.new(merge_first_row(user_params, params[:images]).merge({ password: params[:telephone] }))
     if user.save
+      store_and_trigger_notification_job(:user_sign_up, {sign_up_user_id: user.id})
       render json: user.as_json_with_jwt, status: :created
     else
       render json: user.errors, status: :unprocessable_entity
@@ -40,15 +43,23 @@ class Api::User::SessionsController < Api::User::ApplicationController
       User.find_by(email: user_parameter)
     end
     random_text = SecureRandom.hex(5)
-    user.auth_token = nil
-    user.email = "anonymous_#{random_text}@saver.com"
-    user.first_name = "anonymous"
-    user.last_name = "anonymous"
+
     user.reset_password(random_text, random_text)
-    user.telephone = "#{rand(1000000000)}"
-    user.username = "anonymous_#{random_text}"
-    user.user_device_id = nil
-    user.save
+    user.update(
+      auth_token: nil,
+      email: "anonymous_#{random_text}@saver.com",
+      first_name: "anonymous",
+      last_name: "anonymous",
+      telephone: "#{rand(1000000000)}",
+      username: "anonymous_#{random_text}",
+      user_device_id: nil,
+      status: :inactive,
+    )
+    user.destroy
+  end
+
+  def all
+    render json: User.all
   end
 
   def me
@@ -61,6 +72,14 @@ class Api::User::SessionsController < Api::User::ApplicationController
     else
       render json: current_user.errors, status: :unprocessable_entity
     end
+  end
+
+  def update_user_location
+    current_user.update_location(params[:current_latitude], params[:current_longitude])
+  end
+
+  def set_locale_language
+    I18n.locale = params[:locale].present? ? params[:locale].to_sym : :nn
   end
 
   private

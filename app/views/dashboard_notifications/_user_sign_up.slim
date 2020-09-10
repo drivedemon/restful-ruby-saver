@@ -1,0 +1,7 @@
+= link_to request_history_customers_path(notification_data[:sign_up_user_id], from_notification: dashboard_notification_id), class: "dropdown-item", id: "notification-#{dashboard_notification_id}" do 
+  .notification
+    .notification__icon.border--green
+        = image_tag asset_path("icons/icon-user-management-active.png"), height: 12
+    .notification__detail
+      .new-user-sign-up-notification.message-box =  t("dashboard.notification.new_user")
+      span.text-muted =  "on #{dashboard_notification_at}"

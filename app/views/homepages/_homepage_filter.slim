@@ -1,0 +1,11 @@
+.row.heading x-data="tableFilter()"
+  .col-9
+    h2 = t("dashboard.navbar.dashboard")
+  .col-3
+    .filter-list
+      .filter-box
+        select.time-filter x-model="time" @change="appendQueryUrl"
+          option[value="" name="filter"]  = t("dashboard.button.time")
+          option[value="month" name="month"]  = t("dashboard.button.last_month")
+          option[value="year" name="year"]  = t("dashboard.button.last_year")
+          option[value="all" name="all"]  = t("dashboard.button.all_time")

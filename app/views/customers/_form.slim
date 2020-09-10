@@ -1,0 +1,53 @@
+= form_with model: @user, url: customer_path(@user), html: { method: :put } do |f|
+  .content-box.mb-5 x-data="profileUpload()"
+    .card-body
+      .row
+        .col-3
+          .user-image-upload
+            - if @user.image_path.present?
+              = image_tag @user.image_path, id: "avatarDisplay"
+            - else
+              = image_tag asset_path("white_placeholder.png"), id: "avatarDisplay"
+            = f.file_field :avatar, direct_upload: true, accept: "image/*", id: "imgInput"
+            .pen-icon @click="selectFile"
+              = image_tag asset_path("icons/icon-edit.png"), height: "20"
+        .col-9
+          .row
+            .col-12 
+              p.font-weight-bold = t("dashboard.dashboard_user.personal_info")
+          .row
+            .col-6
+              = f.label :first_name, t("dashboard.dashboard_user.first_name")
+              br/
+              = f.text_field :first_name, required: true, class: "form-control mb-4"
+            .col-6
+              = f.label :last_name, t("dashboard.dashboard_user.last_name")
+              br/
+              = f.text_field :last_name, required: true, class: "form-control mb-4"
+  .content-box.mb-5
+    .card-body
+      .row
+        .col-6
+          p.font-weight-bold = t("dashboard.dashboard_user.contact_information")
+      .row.mb-6
+        .col-6
+          = f.label :username, t("dashboard.dashboard_user.username")
+          br/
+          = f.text_field :username, required: true, class: "form-control mb-1", maxlength: "20", autocomplete: "off"
+          span.small.form-text.text-muted = t("dashboard.dashboard_user.username_limit")
+        .col-6
+          = f.label :email, t("dashboard.dashboard_user.email_address")
+          br/
+          = f.email_field :email, required: true, class: "form-control mb-4", autocomplete: "off"
+      .row.mb-6
+        .col-6
+          = f.label :telephone, t("dashboard.user_information.telephone")
+          br/
+          = f.text_field :telephone, required: true, class: "form-control mb-1", readonly: true
+        .col-6
+          = f.label :profession, t("dashboard.user_information.profession")
+          br/
+          = f.collection_select :profession_id, @professions, :id, :name, {prompt: t("dashboard.user_information.select_profession")}, { required: true, class: "form-control mb-4 custom-select custom-select-lg" }
+  .row.d-flex.justify-content-center
+    .actions
+      = f.submit t("dashboard.dashboard_user.update_profile"), class: "btn btn-success", id: "submit-user-form"

@@ -1,0 +1,18 @@
+- @help_request_histories.each do |help_request|
+  tr
+    td
+      span class="level level--#{color_to_level(help_request.color_status)}"
+        span.mr-1 •
+        = color_to_level(help_request.color_status)
+    td = format_date_time_view(help_request.created_at)
+    td.table__description = help_request.description
+    td = format_currency(help_request.price)
+    td.image-with-name
+      - help_request.offer_requests.each do |offer_request|
+        - if offer_request.user.image_path.present?
+          .avatar-image style="background-image: url(#{offer_request.user.image_path})"
+        - else
+          .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+    td
+      span class="status status--#{help_request.status}"
+        = help_request.status

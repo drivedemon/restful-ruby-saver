@@ -1,0 +1,89 @@
+.container.pb-0 x-data="rating()"
+  .row
+    .col-7
+      .breadcrumb
+        = link_to t("dashboard.navbar.user_management"), customers_path, class: "font-weight-bold"
+        span.ml-1
+          | >
+          = @user.full_name
+    .col-5.text-right x-data="tableFilter()"
+      .d-flex.justify-content-end
+        - button_name = @user.status.to_sym == :banned ? t("dashboard.button.unban_user") : t("dashboard.button.ban_user")
+        - message_name = @user.status.to_sym == :banned ? t("dashboard.button.message_unban") : t("dashboard.button.message_ban")
+        - if can? :destroy, :customer
+          = link_to button_name, customer_path(@user), method: :delete, data: { confirm: message_name }, class: "btn btn-danger mr-4"
+        button.btn.btn-export = t("dashboard.button.export")
+        .dropdown
+          button class="btn btn-export dropdown-toggle px-2" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+          .dropdown-menu.dropdown-menu-right aria-labelledby="dropdownMenuLink"
+            a class="dropdown-item" href="javascript:void(0)" @click="exportUserHistory('#{export_csv_information_customers_path(@user)}', 'request_history')"
+              | Export request history in CSV
+            a class="dropdown-item" href="javascript:void(0)" @click="exportUserHistory('#{export_csv_information_customers_path(@user)}', 'offer_history')"
+              | Export offer history in CSV
+            a class="dropdown-item" href="javascript:void(0)" @click="exportUserHistory('#{export_csv_information_customers_path(@user)}', 'earning_history')"
+              | Export earning history in CSV
+            a class="dropdown-item" href="javascript:void(0)" @click="exportUserHistory('#{export_csv_information_customers_path(@user)}', 'spending_history')"
+              | Export spending history in CSV
+
+    .col-5
+      .content-box.mb-5 style="min-height: 300px"
+        .row
+          .col-12.mb-2
+            - if @user.image_path.present?
+              .profile-image.m-auto style="background-image: url(#{@user.image_path})"
+            - else
+              .profile-image.m-auto style="background-image: url(#{asset_path("saver-logo.png")})"
+
+          .col-12.text-center
+            span.font-weight-bold = @user.full_name
+          .col-12.text-center.mb-3
+            span x-html="getRatingStar(#{@user.rates.average(:score).to_i})"
+            span.font-weight-bold.ml-1 = @user.rates.average(:score).to_i
+          .col-4.text-center.border-right
+            h5.font-weight-bold.nowrap = @user.help_requests.count
+          .col-4.text-center.border-right
+            h5.font-weight-bold.nowrap = "#{total_amount_of_user(@user.offer_requests_accepted.pluck(:price))} kr"
+          .col-3.text-center
+            h5.font-weight-bold.nowrap = "#{total_amount_of_user(@user.help_requests.pluck(:price))} kr"
+          .col-4.text-center
+            span.text-muted = t("dashboard.request_customer.post")
+          .col-4.text-center
+            span.text-muted = t("dashboard.request_customer.earning")
+          .col-4.text-center
+            span.text-muted = t("dashboard.request_customer.spending")
+
+    .col-7
+      .content-box.mb-5 style="min-height: 300px"
+        .row.mb-4
+          .col-7
+            h2 = t("dashboard.user_information.contact_information")
+          .col-5.text-right
+            - if can? :edit, :customer
+              = link_to t("dashboard.dashboard_user.edit_user"), edit_customer_path(@user), class: "btn btn-success"
+          br/
+          .col-4
+            span.text-muted = t("dashboard.user_information.email")
+          .col-4
+            span.text-muted = t("dashboard.user_information.telephone")
+          .col-4
+            span.text-muted = t("dashboard.user_information.username")
+          .col-4
+            p.font-weight-bold = @user.email
+          .col-4
+            p.font-weight-bold = @user.telephone
+          .col-4
+            p.font-weight-bold = @user.username
+        .row
+          .col-4
+            span.text-muted = t("dashboard.user_information.profession")
+          .col-4
+            span.text-muted = t("dashboard.user_information.status")
+          .col-4
+            span.text-muted = t("dashboard.user_information.created_date")
+          .col-4
+            p.font-weight-bold = @user.profession.name
+          .col-4
+            span class="status status--#{@user.status}"
+              = @user.status
+          .col-4
+            p.font-weight-bold = format_date_view(@user.created_at)

@@ -1,0 +1,18 @@
+- @offer_request_histories.each do |offer_request|
+  - offer_related_help = offer_request.owned_help_request
+  tr
+    td
+      span class="level level--#{color_to_level(offer_related_help.color_status)}"
+        span.mr-1 •
+        = color_to_level(offer_related_help.color_status)
+    td = format_date_time_view(offer_request.created_at)
+    td.table__description = offer_request.owned_help_request.description
+    td = format_currency(offer_related_help.price)
+    td.image-with-name
+      - if offer_related_help.user.image_path.present?
+        .avatar-image style="background-image: url(#{offer_related_help.user.image_path})"
+      - else
+        .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+    td
+      span class="status status--#{offer_related_help.status}"
+        = offer_related_help.status

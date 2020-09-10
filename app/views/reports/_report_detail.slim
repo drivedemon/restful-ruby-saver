@@ -1,0 +1,15 @@
+- @report_history.each do |report|
+  tr
+    td.image-with-name
+      - if report.reported_from_user.image_path.present?
+        .avatar-image style="background-image: url(#{report.reported_from_user.image_path})"
+      - else
+        .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+      = report.reported_from_user.full_name
+    td.text-center = format_date_view(report.created_at)
+    td = report_type_to_wording(type_id: report.type_id, other_comment: report.comment)
+    td.table__description = report.reported_from.description
+    td.text-center
+      a href="javascript:void(0)"
+        = link_to request_path(report.help_request_id) do
+          = image_tag asset_path("icons/icon-view.png"), height: "20", class: "mr-2"

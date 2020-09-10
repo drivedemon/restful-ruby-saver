@@ -1,0 +1,14 @@
+.login-bg
+  .brand-name 
+    = image_tag asset_path("saver-logo.png"), class: "rounded-circle mr-3", height: "50"
+    span SAVER
+  .container.forgot-password-form.d-flex.align-items-center.flex-column
+    .header-password = t("dashboard.forgot_password.forgot_password")
+    p = t("dashboard.forgot_password.forgot_password_sub")
+    = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "d-flex flex-grow-1 flex-column w-100 justify-content-center align-items-center" }) do |f|
+      - devise_error_messages!
+      .field.w-100
+        = f.email_field :email, autofocus: true, autocomplete: "email", placeholder: t("dashboard.forgot_password.email"), class: "form-control mb-4"
+      .actions
+        = f.submit t("dashboard.forgot_password.send_instruction"), class: "btn submit-btn"
+    = link_to t("dashboard.forgot_password.back_to_sign_in"), new_session_path(resource_name), class: "back-sign-in"

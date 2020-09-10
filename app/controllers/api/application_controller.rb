@@ -1,4 +1,4 @@
-class Api::ApplicationController < ApplicationController
+class Api::ApplicationController < ApiApplicationController
   rescue_from BadError, with: :handle_400
   rescue_from AuthenticationError, with: :handle_401
   rescue_from JWT::VerificationError, with: :handle_401

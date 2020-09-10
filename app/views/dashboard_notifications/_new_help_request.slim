@@ -1,0 +1,7 @@
+= link_to request_path(notification_data[:new_request_id], from_notification: dashboard_notification_id), class: "dropdown-item", id: "notification-#{dashboard_notification_id}" do 
+  .notification
+    .notification__icon.border--blue
+        = image_tag asset_path("icons/icon-revenue.png"), height: 12
+    .notification__detail
+      .new-request-notification.message-box = t("dashboard.notification.new_request")
+      span.text-muted =  "on #{dashboard_notification_at}"

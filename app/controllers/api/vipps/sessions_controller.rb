@@ -1,5 +1,6 @@
 class Api::Vipps::SessionsController < Api::User::ApplicationController
   skip_before_action :set_current_user_from_header, only: [:index]
+  skip_before_action :check_banned_user, only: [:index]
   before_action :vipps_login, only: [:index]
   before_action :vipps_get_token, only: [:payment, :capture]
   before_action :set_locale_language, only: [:payment, :capture]
@@ -24,7 +25,7 @@ class Api::Vipps::SessionsController < Api::User::ApplicationController
     vipps_capture = VippsManagement.capture_order(
       @vipps_token['token_type'],
       @vipps_token['access_token'],
-      params[:amount], # 100 = 1kr
+      calculate_capture_amount * 100, # 100 = 1kr
       params[:order_id]
     )
     return render json: vipps_capture, status: :bad_request if check_response?(vipps_capture)
@@ -32,7 +33,7 @@ class Api::Vipps::SessionsController < Api::User::ApplicationController
     @help_request.update(is_paid: true)
     Payment.create(
       order_id: params[:order_id],
-      amount: params[:amount],
+      amount: calculate_capture_amount,
       help_request_id: @help_request.id,
       user_id: current_user.id
     )
@@ -40,6 +41,10 @@ class Api::Vipps::SessionsController < Api::User::ApplicationController
   end
 
   private
+  def calculate_capture_amount
+    (@help_request.price * 20 / 100).to_i
+  end
+
   def set_help_request
     @help_request = HelpRequest.find(params[:help_request_id])
   end

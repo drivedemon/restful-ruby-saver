@@ -5,7 +5,8 @@ module NotificationFcmFormat
 
   def as_fcm_notification_format
     {
-      key => value
+      key => value,
+      "help_request" => additional_help_request_id
     }
   end
 
@@ -16,11 +17,19 @@ module NotificationFcmFormat
   end
 
   def value
+    id
+  end
+
+  def additional_help_request_id
     case key.to_sym
-    when :offerrequest
-      chat_room.id
-    else
+    when :help_request
       id
+    when :offer_request
+      help_request_id
+    when :chat_room
+      help_request_id
+    when :chat
+      chat_room.help_request_id
     end
   end
 end

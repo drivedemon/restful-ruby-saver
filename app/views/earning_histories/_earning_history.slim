@@ -1,0 +1,22 @@
+- @earning_histories.each do |earning_history|
+  tr id="#{earning_history.id}"
+    - offer_request = earning_history.offer_requests.first
+    td
+      a href="javascript:void(0)" x-show="isIncluded(#{earning_history.id})" @click="selectSingleCheckbox(false, #{earning_history.id})"
+        = image_tag asset_path("icons/checkbox-checked.png"), height: "20"
+      a href="javascript:void(0)" x-show="!isIncluded(#{earning_history.id})" @click="selectSingleCheckbox(true, #{earning_history.id})"
+        = image_tag asset_path("icons/checkbox-empty.png"), height: "20"
+    td = earning_history.payment.present? ? earning_history.payment.order_id : "-"
+    td.image-with-name
+      - user = offer_request.user
+      - if user.image_path.present?
+        .avatar-image style="background-image: url(#{user.image_path})"
+      - else
+        .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+      = user.full_name
+    td = earning_history.payment.present? ? format_date_time_view(earning_history.payment.created_at) : "-"
+    td = format_currency(earning_history.price)
+    td.table__description = offer_request.description.presence || "-"
+    td
+      span class="status status--#{earning_history.status}"
+        = earning_history.status

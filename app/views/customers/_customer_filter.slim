@@ -1,0 +1,27 @@
+.row.filter-row.align-items-center x-data="tableFilter()"
+  .col-4
+    h5.user-count
+      = "Showing #{@total_users_count} users"
+  .col-8
+    .filter-list
+      span
+        | Filter by:
+      .filter-box
+        input.filter-input placeholder = t("dashboard.dashboard_user.name") @keydown.enter="appendQueryUrl" x-model="name"
+      .filter-box#datepicker
+        span.datepicker-input = t("dashboard.button.date_time")
+      .filter-box
+        select.amount-filter x-model="amount" @change="appendQueryUrl"
+          option[value="" name="amount"] = t("dashboard.button.amount")
+          option[value="asc_spending" name="low_to_high"] = t("dashboard.button.spending_low_to_high")
+          option[value="desc_spending" name="high_to_low"] = t("dashboard.button.spending_high_to_low")
+          option[value="asc_earning" name="low_to_high"] = t("dashboard.button.earning_low_to_high")
+          option[value="desc_earning" name="high_to_low"] = t("dashboard.button.earning_high_to_low")
+      .filter-box
+        select.status-filter x-model="status" @change="appendQueryUrl"
+          option[value="" name="status"] = t("dashboard.button.status")
+          option[value="0" name="active"] Active
+          option[value="1" name="banned"] Inactive
+          option[value="2" name="reported"] Banned
+      .filter-box @click="clearFilter"
+        | X

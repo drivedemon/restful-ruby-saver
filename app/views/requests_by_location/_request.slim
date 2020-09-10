@@ -1,0 +1,35 @@
+- @help_requests.each do |help_request|
+  tr id="#{help_request.id}"
+    td
+      a href="javascript:void(0)" x-show="isIncluded(#{help_request.id})" @click="selectSingleCheckbox(false, #{help_request.id})"
+        = image_tag asset_path("icons/checkbox-checked.png"), height: "20"
+      a href="javascript:void(0)" x-show="!isIncluded(#{help_request.id})" @click="selectSingleCheckbox(true, #{help_request.id})"
+        = image_tag asset_path("icons/checkbox-empty.png"), height: "20"
+    td
+      span class="level level--#{color_to_level(help_request.color_status)}"
+        span.mr-1 •
+        = color_to_level(help_request.color_status)
+    td = format_date_time_view(help_request.created_at)
+    td 
+      = help_request.address.presence || t("dashboard.request_location.not_found")
+      br
+      = "(#{help_request.latitude}, #{help_request.longitude})"
+    td = format_currency(help_request.price)
+    td.image-with-name
+      - if help_request.user.image_path.present?
+        .avatar-image style="background-image: url(#{help_request.user.image_path})"
+      - else
+        .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+      = help_request.user.full_name
+    td
+      span class="status status--#{help_request.status}"
+        = help_request.status
+    td
+      a href="javascript:void(0)"
+        = link_to request_path(help_request) do
+          = image_tag asset_path("icons/icon-view.png"), height: "20", class: "mr-2"
+      - if can? :destroy, :request
+        span.mr-2 |
+        a href="javascript:void(0)"
+          = link_to request_path(help_request), method: :delete, data: { confirm: 'Are you certain you want to delete this?' } do
+            = image_tag asset_path("icons/icon-delete.png"), height: "20", class: "mr-2"

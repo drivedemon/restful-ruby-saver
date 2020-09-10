@@ -1,4 +1,6 @@
 class Api::ReportsController <  Api::User::ApplicationController
+  include DashboardNotificationTrigger
+
   def index
     render json: ReportType.new(Report.type_ids).sentenses
   end
@@ -6,6 +8,7 @@ class Api::ReportsController <  Api::User::ApplicationController
   def create
     report = Report.new(report_params)
     if report.save
+      store_and_trigger_notification_job(:user_reported, {report_id: report.id})
       render json: report, status: :created
     else
       render json: report.errors, status: :unprocessable_entity

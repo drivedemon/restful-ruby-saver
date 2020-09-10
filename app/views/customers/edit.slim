@@ -1,0 +1,9 @@
+.container
+  .row
+    .col-7
+      .breadcrumb
+        span.font-weight-bold.ml-1 
+          = link_to t("dashboard.navbar.user_management"), customers_path
+          |  > 
+          = link_to fullname(@user.first_name, @user.last_name), request_history_customers_path(@user)
+  = render "form"

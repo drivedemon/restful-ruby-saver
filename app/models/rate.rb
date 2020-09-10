@@ -1,7 +1,7 @@
 class Rate < ApplicationRecord
-  @@rate_topic = 'You are the best!'
+  RATE_TOPIC = I18n.t("notification_mobile.you_are_the_best")
 
-  after_create :create_notify_history, :push_notify_to_user
+  after_commit :create_notify_history, :push_notify_to_user, on: :create
   belongs_to :user
   belongs_to :offer_request
   has_many :notifications
@@ -29,6 +29,6 @@ class Rate < ApplicationRecord
   end
 
   def push_notify_to_user
-    FcmNotification.push_notification(@@rate_topic, comment, nil, offer_request.user, as_fcm_notification_format) if offer_request.user.notification_status
+    FcmNotification.push_notification(RATE_TOPIC, comment, nil, offer_request.user, as_fcm_notification_format) if offer_request.user.notification_status
   end
 end

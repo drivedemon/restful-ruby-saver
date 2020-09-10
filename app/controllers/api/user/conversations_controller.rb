@@ -11,7 +11,7 @@ class Api::User::ConversationsController < Api::User::ApplicationController
 
   private
   def set_offer_requests_related_to_help_request
-    help_requests = current_user.help_requests.without_complete_status
+    help_requests = check_parameter(current_user.help_requests)
 
     @offer_requests_related_to_help_requests = help_requests.map do |help_request|
       offer_with_status = check_parameter(help_request.offer_requests)
@@ -26,11 +26,11 @@ class Api::User::ConversationsController < Api::User::ApplicationController
     @offer_requests = each_data(offer_with_status)
   end
 
-  def check_parameter(offer_requests)
+  def check_parameter(model)
     if params[:show_all]
-      offer_requests.with_complete_status
+      model.with_complete_status
     else
-      offer_requests.without_complete_status
+      model.without_complete_status
     end
   end
 

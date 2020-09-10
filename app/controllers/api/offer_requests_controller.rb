@@ -41,6 +41,12 @@ class Api::OfferRequestsController < Api::User::ApplicationController
 
   # DELETE /api/offer_requests/1
   def destroy
+    OfferRequest.create_notify_history(
+      action_type: :offer_request,
+      receive_id: @offer_request.help_request.user_id,
+      chat_model: nil,
+      offer_request_model: @offer_request
+    )
     @offer_request.destroy
   end
 
@@ -61,14 +67,29 @@ class Api::OfferRequestsController < Api::User::ApplicationController
     if params[:helper_request_status_id].present?
       reject_offer_after_confirm if validate_status?(:confirm)
       update_help_request_status
-      return OfferRequest.create_notify_history(@chat, @offer_request.help_request.user)
+      return OfferRequest.create_notify_history(
+        action_type: :chat,
+        receive_id: @offer_request.help_request.user_id,
+        chat_model: @chat,
+        offer_request_model: nil
+      )
     end
 
-    OfferRequest.create_notify_history(@chat, @offer_request.user)
+    OfferRequest.create_notify_history(
+      action_type: :chat,
+      receive_id: @offer_request.user_id,
+      chat_model: @chat,
+      offer_request_model: nil
+    )
   end
 
   def create_reverse_notify
     force_user = validate_status?(:reverse) ? @offer_request.user : @offer_request.owned_help_request_user
+
+    OfferRequest.notify_pusher(
+      help_request_id: @offer_request.help_request_id,
+      event_name: validate_status?(:reverse) ? "cancel-accept-offer" : "decline-accept-help"
+    )
     @offer_request.notifications.create(user_id: force_user.id, is_offer_rejected: true)
   end
 
@@ -89,7 +110,7 @@ class Api::OfferRequestsController < Api::User::ApplicationController
   end
 
   def update_help_request_status
-    help_request_status = validate_status?(:confirm) ? HelpRequest.statuses[:confirm] : HelpRequest.statuses[:completed]
+    help_request_status = validate_status?(:confirm) ? HelpRequest.statuses[:confirmed] : HelpRequest.statuses[:completed]
     @offer_request.help_request.update(status: help_request_status)
   end
 

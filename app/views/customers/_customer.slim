@@ -1,0 +1,24 @@
+- @users.each do |user|
+  tr id="#{user.id}"
+    td
+      a href="javascript:void(0)" class="checkbox" x-show="isIncluded(#{user.id})" @click="selectSingleCheckbox(false, #{user.id})"
+        = image_tag asset_path("icons/checkbox-checked.png"), height: "20"
+      a href="javascript:void(0)" class="checkbox" x-show="!isIncluded(#{user.id})" @click="selectSingleCheckbox(true, #{user.id})"
+        = image_tag asset_path("icons/checkbox-empty.png"), height: "20"
+    td.image-with-name
+      - if user.image_path.present?
+        .avatar-image style="background-image: url(#{user.image_path})"
+      - else
+        .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+      = user.full_name
+    td = user.email
+    td = format_currency(user.total_earning)
+    td = format_currency(user.total_spending)
+    td = user.total_request
+    td
+      span class="status status--#{user.status}"
+        = user.status
+    td
+      a href="javascript:void(0)"
+        = link_to request_history_customers_path(user) do
+          = image_tag asset_path("icons/icon-view.png"), height: "20", class: "mr-2"

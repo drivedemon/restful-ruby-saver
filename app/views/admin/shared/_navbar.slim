@@ -1,0 +1,102 @@
+.container-fluid x-data="navbar()" x-cloak=""
+  .row
+    nav#sidebarMenu.col-md-3.col-lg-2.d-md-block.sidebar.sidebar-wrapper
+      .sidebar-sticky.pt-3
+        a.navbar-brand.col-md-3.col-lg-2.mr-0 href="#"
+          = image_tag asset_path("saver-logo.png"), class: "rounded-circle mr-3", height: "40"
+          span SAVER
+        h4.sidebar-heading.d-flex.justify-content-between.align-items-center.mt-4
+          span = t("dashboard.navbar.main_menu")
+        ul.nav.flex-column
+          li.nav-item
+            = link_to authenticated_root_path, method: :get, class: "nav-link" do
+              span
+                = image_tag asset_path("icons/icon-dashboard-inactive.png"), class: "mr-2", height: "24"
+                = t("dashboard.navbar.dashboard")
+          li.nav-item :class="{'nav-item__active': checkActiveUrl(['customers', 'spending_histories', 'earning_histories', 'reports'])}"
+            a.nav-link.collapsed href="#usermanagementsubmenu" data-toggle="collapse" data-target="#usermanagementsubmenu"
+              span x-show="!checkActiveUrl(['customers', 'spending_histories', 'earning_histories', 'reports'])"
+                = image_tag asset_path("icons/icon-user-management-inactive.png"), class: "mr-2", height: "24"
+                = t("dashboard.navbar.user_management")
+              span.text-green x-show="checkActiveUrl(['customers', 'spending_histories', 'earning_histories', 'reports'])"
+                = image_tag asset_path("icons/icon-user-management-active.png"), class: "mr-2", height: "15"
+                = t("dashboard.navbar.user_management")
+            #usermanagementsubmenu.collapse aria-expanded="false"
+              ul.nav
+                li.nav-item
+                  = link_to customers_path, class: "nav-link" do
+                    span = t("dashboard.navbar.user_list")
+                li.nav-item
+                  = link_to spending_histories_path, class: "nav-link" do
+                    span = t("dashboard.navbar.spending_history")
+                li.nav-item
+                  = link_to earning_histories_path, class: "nav-link" do
+                    span = t("dashboard.navbar.earning_history")
+                li.nav-item
+                  = link_to reports_path, class: "nav-link" do
+                    span = t("dashboard.navbar.report")
+          li.nav-item :class="{'nav-item__active': checkActiveUrl(['requests'])}"
+            a.nav-link.collapsed href="#requestsubmenu" data-toggle="collapse" data-target="#requestsubmenu"
+              span x-show="!checkActiveUrl(['requests'])"
+                = image_tag asset_path("icons/icon-request-inactive@1x.png"), class: "mr-2", height: "24"
+                = t("dashboard.navbar.request")
+              span.text-green x-show="checkActiveUrl(['requests'])"
+                = image_tag asset_path("icons/icon-request-active@1x.png"), class: "mr-2", height: "24"
+                = t("dashboard.navbar.request")
+            #requestsubmenu.collapse aria-expanded="false"
+              ul.nav
+                li.nav-item
+                  = link_to requests_path, class: "nav-link" do
+                    span = t("dashboard.navbar.request_list")
+                li.nav-item
+                  = link_to requests_by_location_index_path, class: "nav-link" do
+                    span = t("dashboard.navbar.request_location")
+        h4.sidebar-heading.d-flex.justify-content-between.align-items-center.mt-4
+          span = t("dashboard.navbar.settings")
+        ul.nav.flex-column.mb-2
+          / li.nav-item
+          /   a.nav-link href="#"
+              / span
+              /   = image_tag asset_path("icons/icon-help-inactive.png"), class: "mr-2", height: "24"
+              /   = t("dashboard.navbar.help")
+          li.nav-item :class="{'nav-item__active': checkActiveUrl(['dashboard_users'])}"
+            a.nav-link.collapsed href="#settingsubmenu" data-toggle="collapse" data-target="#settingsubmenu"
+              span x-show="!checkActiveUrl(['dashboard_users'])"
+                = image_tag asset_path("icons/icon-settings-inactive@1x.png"), class: "mr-2", height: "24"
+                = t("dashboard.navbar.settings")
+              span.text-green x-show="checkActiveUrl(['dashboard_users'])"
+                = image_tag asset_path("icons/icon-settings-active@1x.png"), class: "mr-2", height: "24"
+                = t("dashboard.navbar.settings")
+            #settingsubmenu.collapse aria-expanded="false"
+              ul.nav
+                li.nav-item
+                  = link_to dashboard_users_path, class: "nav-link" do
+                    span = t("dashboard.navbar.profile_management")
+                / li.nav-item
+                /   a.nav-link href="#"
+                /     span = t("dashboard.navbar.group_permission")
+          li.nav-item
+            = link_to destroy_dashboard_user_session_path, method: :delete, class: "nav-link" do
+              span
+                = image_tag asset_path("icons/icon-logout-inactive.png"), class: "mr-2", height: "24"
+                = t("dashboard.navbar.logout")
+    main.col-md-9.ml-sm-auto.col-lg-10.no-padding role="main"
+      .searchbox-wrapper
+        .w-100
+        .dropdown.border-right.mr-2.pr-2
+          a.dropdown-toggle href="javascript:void(0)" id="dropdownMenuButton" data-toggle="dropdown"
+            = image_tag asset_path("icons/icon-notification.png"), class: "mr-2", height: "30"
+            .notification-alert
+          .dropdown-menu.dropdown-menu-right
+            p.font-weight-bold.pl-4.pt-2 Notifications
+            .dropdown-divider
+            #dashboard-notifications
+              = render partial: "dashboard_notifications/dashboard_notifications"
+              a.dropdown-item.no-notification href="javascript:void(0)" No new notifications
+        .profile.ml-2
+          - if current_dashboard_user.avatar.present?
+            .avatar-image style="background-image: url(#{rails_blob_url(current_dashboard_user.avatar, only_path: true)})" class="mr-3"
+          - else
+            .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})" class="mr-3"
+          p = fullname(current_dashboard_user.first_name, current_dashboard_user.last_name)
+      = yield

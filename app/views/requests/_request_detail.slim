@@ -1,0 +1,52 @@
+.col-12
+  .content-box.mb-5
+    .row
+      .col-12
+        h2 = t("dashboard.request_customer.request_information")
+      br/
+    .row
+      .col-4
+        span.text-muted = t("dashboard.request_customer.request_description")
+
+        p.font-weight-bold = @help_request.description
+        .image-list
+          - @help_request.image_help_requests.each do |e|
+            - if e.image_path.present?
+              .request-image.mr-2 style="background-image: url(#{e.image_path})"
+            - else
+              .request-image.mr-2 style="background-image: url(#{asset_path("saver-logo.png")})"
+          end
+      .col-8
+        .row
+          .col-4
+            span.text-muted = t("dashboard.request_customer.problem_type")
+          .col-4
+            span.text-muted = t("dashboard.request_customer.spending")
+          .col-4
+            span.text-muted = t("dashboard.request_customer.created_date")
+          .col-4
+            p class="level level--#{color_to_level(@help_request.color_status)}"
+              span.mr-1 •
+              = "#{color_to_level(@help_request.color_status)}"
+          .col-4
+            p.font-weight-bold = "#{@help_request.price} kr"
+          .col-4
+            p.font-weight-bold = format_date_time_view(@help_request.created_at)
+
+          .col-4.pt-4
+            span.text-muted = t("dashboard.request_customer.distance")
+          .col-4.pt-4
+            span.text-muted = t("dashboard.request_customer.fee")
+          .col-4.pt-4
+            span.text-muted = t("dashboard.request_customer.status")
+          .col-4
+            p.font-weight-bold = "#{@help_request.distance_scope} miles"
+          .col-4
+            p.font-weight-bold
+              - if @help_request.payment.present?
+                = "#{@help_request.payment.amount} kr"
+              - else
+                = "-"
+          .col-4
+            span class="status status--#{@help_request.status}" 
+              = @help_request.status

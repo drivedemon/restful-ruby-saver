@@ -1,0 +1,7 @@
+$("<%= escape_javascript(render "customer_help_request_history_data", help_request_histories: @help_request_histories) %>").appendTo("#help-request-histories");
+
+<% if @help_request_histories.total_pages == @help_request_histories.current_page %>
+  $("#load-more-help-request-histories").hide();
+<% else %>
+  $("#load-more-help-request-histories").attr("href", "<%== request_history_customers_path(request.params.except(:controller,:action,:locale).merge(page: @help_request_histories.current_page+1)) %>");
+<% end %>

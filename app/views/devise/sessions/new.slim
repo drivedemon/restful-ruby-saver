@@ -1,0 +1,25 @@
+.login-bg
+  .brand-name 
+    = image_tag asset_path("saver-logo.png"), class: "rounded-circle mr-3", height: "50"
+    span SAVER
+  .container.login-form
+    .header-login = t("dashboard.log_in.log_in")
+    = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "d-flex flex-grow-1 flex-column w-100 justify-content-center align-items-center" }) do |f|
+      .field.w-100
+        = f.label :login, t("dashboard.log_in.username")
+        br/
+        = f.text_field :login, autofocus: true, class: "form-control mb-4"
+      .field.w-100
+        = f.label :password, t("dashboard.log_in.password")
+        br/
+        = f.password_field :password, autocomplete: "current-password", class: "form-control mb-4"
+      .row.w-100
+        .col-6
+          - if devise_mapping.rememberable?
+            .field
+              = f.check_box :remember_me, class: "form-check-input"
+              = f.label :remember_me, t("dashboard.log_in.remember_me")
+        .col-6.text-right
+          = link_to t("dashboard.log_in.forgot_your_password"), new_password_path(resource_name), class: "forgot-password-btn"
+      .actions.mt-4
+        = f.submit t("dashboard.log_in.log_in"), class: "btn submit-btn"

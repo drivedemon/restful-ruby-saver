@@ -1,0 +1,11 @@
+.container
+  .row
+    .col-7
+      .breadcrumb
+        span.font-weight-bold = t("dashboard.navbar.settings")
+        span.ml-1 
+          | > 
+          = link_to t("dashboard.navbar.profile_management"), dashboard_users_path
+          |  > 
+          = t("dashboard.dashboard_user.create_user")
+  = render "form"

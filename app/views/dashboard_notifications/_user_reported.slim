@@ -1,0 +1,7 @@
+= link_to report_path(notification_data[:report_id], from_notification: dashboard_notification_id), class: "dropdown-item", id: "notification-#{dashboard_notification_id}" do 
+  .notification
+    .notification__icon.border--yellow
+        = image_tag asset_path("icons/icon-assistance@1x.png"), height: 12
+    .notification__detail
+      .user-reported-notification.message-box = t("dashboard.notification.reported")
+      span.text-muted = "on #{dashboard_notification_at}"

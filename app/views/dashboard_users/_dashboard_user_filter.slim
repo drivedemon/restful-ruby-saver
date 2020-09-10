@@ -1,0 +1,15 @@
+.row.filter-row x-data="tableFilter()"
+  .col-4
+    h5.user-count = t("dashboard.dashboard_user.showing_users", number: @total_dashboard_users_count)
+  .col-8
+    .filter-list
+      span
+        = t("dashboard.dashboard_user.filter_by")
+      .filter-box#datepicker
+        span.datepicker-input = t("dashboard.dashboard_user.date_created")
+      .filter-box
+        = select_tag :role_id, options_from_collection_for_select(@roles, :id, :name), class: 'role-filter', include_blank: t("dashboard.dashboard_user.role")
+      .filter-box
+        input.filter-input placeholder = t("dashboard.dashboard_user.name") @keydown.enter="appendQueryUrl" x-model="name"
+      .filter-box @click="clearFilter()"
+        | X

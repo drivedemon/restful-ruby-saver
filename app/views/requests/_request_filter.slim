@@ -1,0 +1,30 @@
+.row.filter-row.align-items-center x-data="tableFilter()"
+  .col-4
+    h5.user-count
+      = t("dashboard.request_customer.showing_requests", number: @total_requests_count)
+  .col-8
+    .filter-list
+      span
+        = t("dashboard.dashboard_user.filter_by")
+      .filter-box
+        select.level-filter x-model="level" @change="appendQueryUrl"
+          option[value="" name="level"] = t("dashboard.button.level")
+          option[value="1" name="normal"] = t("dashboard.button.normal")
+          option[value="2" name="assistance"] = t("dashboard.button.assist")
+          option[value="3" name="urgent"] = t("dashboard.button.urgent")
+      .filter-box#datepicker
+        span.datepicker-input = t("dashboard.button.date_time")
+      .filter-box
+        select.amount-filter x-model="amount" @change="appendQueryUrl"
+          option[value="" name="amount"] = t("dashboard.button.amount")
+          option[value="asc" name="low_to_high"] = t("dashboard.button.low_to_high")
+          option[value="desc" name="high_to_low"] = t("dashboard.button.high_to_low")
+      .filter-box
+        select.status-filter x-model="status" @change="appendQueryUrl"
+          option[value="" name="status"] = t("dashboard.button.status")
+          option[value="1" name="1"] = t("dashboard.button.pending")
+          option[value="2" name="2"] = t("dashboard.button.confirmed")
+          option[value="3" name="3"] = t("dashboard.button.completed")
+          option[value="5" name="5"] = t("dashboard.button.cancelled")
+      .filter-box @click="clearFilter"
+        | X

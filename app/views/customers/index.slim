@@ -1,0 +1,35 @@
+.container x-data="tableFilter()"
+  = render "customer_header"
+  = render "customer_filter"
+
+  table.table.table-card
+    thead
+      tr
+        th
+          a href="javascript:void(0)" @click="selectAllCheckbox('customer-users')" x-show="!isSelectAll"
+            = image_tag asset_path("icons/checkbox-empty.png"), height: "20"
+          a href="javascript:void(0)" @click="selectAllCheckbox('customer-users')" x-show="isSelectAll"
+            = image_tag asset_path("icons/checkbox-checked.png"), height: "20"
+        th = t("dashboard.customer.name")
+        th = t("dashboard.customer.email")
+        th = t("dashboard.customer.earning")
+        th = t("dashboard.customer.spending")
+        th = t("dashboard.customer.request")
+        th = t("dashboard.customer.status")
+        th = t("dashboard.customer.action")
+    tbody.customer-user id = "customer-users"
+      = render "customer"
+  #paginator
+    - unless @users.total_pages == @users.current_page || @users.count == 0
+      = link_to t("dashboard.button.load_more"), request.params.except(:controller,:action,:locale).merge(page: @users.current_page+1), id: "load-more-customers", remote: true
+
+
+  .item-selection-box :class="{'show': selectedDataList.length}"
+    .row.align-items-center
+      .col-6
+        a href="javascript:void(0)" class="close-btn mr-3" @click="clearSelectAll"
+          | X
+        span x-text="`${selectedDataList.length} items selected`"
+      .col-6.text-right
+        btn class="btn btn-round btn-round--dark" @click="exportSelectedList('#{export_csv_customers_path}')"
+          = t("dashboard.button.export")

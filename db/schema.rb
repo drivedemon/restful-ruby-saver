@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_22_094420) do
+ActiveRecord::Schema.define(version: 2020_09_10_040235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,8 +54,8 @@ ActiveRecord::Schema.define(version: 2020_07_22_094420) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.float "latitude"
-    t.float "longitude"
+    t.decimal "latitude", precision: 9, scale: 6
+    t.decimal "longitude", precision: 9, scale: 6
     t.datetime "deleted_at"
     t.boolean "is_read", default: false
     t.string "type", default: "GeneralChat"
@@ -63,6 +63,38 @@ ActiveRecord::Schema.define(version: 2020_07_22_094420) do
     t.index ["chat_room_id"], name: "index_chats_on_chat_room_id"
     t.index ["deleted_at"], name: "index_chats_on_deleted_at"
     t.index ["user_id"], name: "index_chats_on_user_id"
+  end
+
+  create_table "dashboard_notifications", force: :cascade do |t|
+    t.bigint "dashboard_user_id"
+    t.integer "notification_type"
+    t.jsonb "notification_data"
+    t.datetime "read_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["dashboard_user_id"], name: "index_dashboard_notifications_on_dashboard_user_id"
+  end
+
+  create_table "dashboard_users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "username"
+    t.bigint "role_id"
+    t.string "first_name"
+    t.string "last_name"
+    t.boolean "receive_notification", default: true
+    t.string "dashboard_language", default: "nn"
+    t.bigint "region_id"
+    t.index ["email"], name: "index_dashboard_users_on_email", unique: true
+    t.index ["region_id"], name: "index_dashboard_users_on_region_id"
+    t.index ["reset_password_token"], name: "index_dashboard_users_on_reset_password_token", unique: true
+    t.index ["role_id"], name: "index_dashboard_users_on_role_id"
+    t.index ["username"], name: "index_dashboard_users_on_username", unique: true
   end
 
   create_table "feedbacks", force: :cascade do |t|
@@ -79,8 +111,6 @@ ActiveRecord::Schema.define(version: 2020_07_22_094420) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_help_request_views_on_deleted_at"
     t.index ["help_request_id"], name: "index_help_request_views_on_help_request_id"
     t.index ["user_id"], name: "index_help_request_views_on_user_id"
   end
@@ -92,13 +122,17 @@ ActiveRecord::Schema.define(version: 2020_07_22_094420) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.float "latitude"
-    t.float "longitude"
+    t.decimal "latitude", precision: 9, scale: 6
+    t.decimal "longitude", precision: 9, scale: 6
     t.bigint "status", default: 1
     t.datetime "deleted_at"
     t.float "distance_scope"
     t.boolean "is_paid", default: false
+    t.string "address"
+    t.index ["color_status"], name: "index_help_requests_on_color_status"
     t.index ["deleted_at"], name: "index_help_requests_on_deleted_at"
+    t.index ["latitude"], name: "index_help_requests_on_latitude"
+    t.index ["longitude"], name: "index_help_requests_on_longitude"
     t.index ["status"], name: "index_help_requests_on_status"
     t.index ["user_id"], name: "index_help_requests_on_user_id"
   end
@@ -149,6 +183,7 @@ ActiveRecord::Schema.define(version: 2020_07_22_094420) do
     t.datetime "deleted_at"
     t.bigint "rate_id"
     t.boolean "is_offer_rejected", default: false
+    t.boolean "is_offer_cancelled", default: false
     t.index ["chat_id"], name: "index_notifications_on_chat_id"
     t.index ["chat_room_id"], name: "index_notifications_on_chat_room_id"
     t.index ["deleted_at"], name: "index_notifications_on_deleted_at"
@@ -166,13 +201,16 @@ ActiveRecord::Schema.define(version: 2020_07_22_094420) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "helpee_request_status_id", default: 1
     t.bigint "helper_request_status_id", default: 1
-    t.float "latitude"
-    t.float "longitude"
+    t.decimal "latitude", precision: 9, scale: 6
+    t.decimal "longitude", precision: 9, scale: 6
     t.datetime "deleted_at"
+    t.string "address"
     t.index ["deleted_at"], name: "index_offer_requests_on_deleted_at"
     t.index ["help_request_id"], name: "index_offer_requests_on_help_request_id"
     t.index ["helpee_request_status_id"], name: "index_offer_requests_on_helpee_request_status_id"
     t.index ["helper_request_status_id"], name: "index_offer_requests_on_helper_request_status_id"
+    t.index ["latitude"], name: "index_offer_requests_on_latitude"
+    t.index ["longitude"], name: "index_offer_requests_on_longitude"
     t.index ["user_id"], name: "index_offer_requests_on_user_id"
   end
 
@@ -204,15 +242,31 @@ ActiveRecord::Schema.define(version: 2020_07_22_094420) do
     t.index ["user_id"], name: "index_rates_on_user_id"
   end
 
+  create_table "regions", force: :cascade do |t|
+    t.string "country_iso", default: "no"
+    t.string "timezone", default: "Europe/Oslo"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "reports", force: :cascade do |t|
     t.bigint "help_request_id", null: false
     t.bigint "offer_request_id", null: false
+    t.text "comment"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "comment"
     t.integer "type_id"
     t.index ["help_request_id"], name: "index_reports_on_help_request_id"
     t.index ["offer_request_id"], name: "index_reports_on_offer_request_id"
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "name"
+    t.string "alias"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["alias"], name: "index_roles_on_alias", unique: true
+    t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -252,8 +306,9 @@ ActiveRecord::Schema.define(version: 2020_07_22_094420) do
     t.boolean "notification_status_green", default: true
     t.boolean "notification_status_yellow", default: true
     t.boolean "notification_status_red", default: true
-    t.float "latitude"
-    t.float "longitude"
+    t.decimal "latitude", precision: 9, scale: 6
+    t.decimal "longitude", precision: 9, scale: 6
+    t.integer "status", default: 0
     t.index ["auth_token"], name: "index_users_on_auth_token"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
@@ -269,6 +324,7 @@ ActiveRecord::Schema.define(version: 2020_07_22_094420) do
   add_foreign_key "chat_rooms", "offer_requests"
   add_foreign_key "chats", "chat_rooms"
   add_foreign_key "chats", "users"
+  add_foreign_key "dashboard_users", "roles"
   add_foreign_key "feedbacks", "users"
   add_foreign_key "help_request_views", "help_requests"
   add_foreign_key "help_request_views", "users"

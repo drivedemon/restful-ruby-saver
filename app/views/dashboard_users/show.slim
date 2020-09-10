@@ -1,0 +1,67 @@
+.container 
+  .row
+    .col-7
+      .breadcrumb
+        span.font-weight-bold = t("dashboard.navbar.settings")
+        span.ml-1 
+          | > 
+          = link_to t("dashboard.navbar.profile_management"), dashboard_users_path
+          |  > 
+          = fullname(@dashboard_user.first_name, @dashboard_user.last_name)
+    .col-5.text-right
+      - if can? :destroy, :dashboard_user
+        = link_to t("dashboard.dashboard_user.delete_user"), dashboard_user_path(@dashboard_user), method: :delete, data: { confirm: 'Are you certain you want to delete this?' }, class: "btn btn-danger mr-4"
+      - if can? :edit, :dashboard_user
+        = link_to t("dashboard.dashboard_user.edit_user"), edit_dashboard_user_path(@dashboard_user), class: "btn btn-success"
+  .content-box.mb-5
+    .row
+      .col-3 
+        .user-image-upload
+          - if @dashboard_user.avatar.present?
+            = image_tag rails_blob_path(@dashboard_user.avatar, only_path: true), id: "avatarDisplay", class: "rounded-circle"
+          - else 
+            = image_tag asset_path("saver-logo.png"), id: "avatarDisplay", class: "rounded-circle"
+      .col-9 
+        .row 
+          .col-12 
+            p.font-weight-bold = t("dashboard.dashboard_user.personal_info")
+        .row
+          .col-6 
+            = label_tag :first_name, t("dashboard.dashboard_user.first_name")
+            br/
+            = text_field_tag :first_name, @dashboard_user.first_name, class: "form-control mb-4", readonly: true
+          .col-6 
+            = label_tag :last_name, t("dashboard.dashboard_user.last_name")
+            br/
+            = text_field_tag :last_name, @dashboard_user.last_name, class: "form-control mb-4", readonly: true
+  .content-box.mb-5
+    .row 
+      .col-4 
+        p.font-weight-bold = t("dashboard.dashboard_user.contact_information")
+    .row 
+      .col-4
+        = label_tag :username, t("dashboard.dashboard_user.username")
+        br/
+        = text_field_tag :username, @dashboard_user.username, class: "form-control mb-4", maxlength: "20", autocomplete: "off", readonly: true
+      .col-4
+        = label_tag :email, t("dashboard.dashboard_user.email_address")
+        br/
+        = email_field_tag :email, @dashboard_user.email, class: "form-control mb-4", autocomplete: "off", readonly: true
+  .content-box
+    .row 
+      .col-4 
+        p.font-weight-bold = t("dashboard.dashboard_user.personal_setting")
+    .row
+      .col-4
+        = label_tag :role, t("dashboard.dashboard_user.role")
+        br/
+        = text_field_tag :role, @dashboard_user.role.name, class: "form-control mb-4", autocomplete: "off", readonly: true
+      .col-4
+        = label_tag :receive_notification, t("dashboard.dashboard_user.receive_notification")
+        br/
+        = text_field_tag :receive_notification, @dashboard_user.receive_notification, class: "form-control mb-4", autocomplete: "off", readonly: true
+    .row
+      .col-4
+        = label_tag :dashboard_language, t("dashboard.dashboard_user.dashboard_language")
+        br/
+        = text_field_tag :dashboard_language, @dashboard_user.dashboard_language, class: "form-control mb-4", autocomplete: "off", readonly: true

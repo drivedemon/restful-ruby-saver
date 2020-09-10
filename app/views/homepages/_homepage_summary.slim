@@ -1,0 +1,22 @@
+.row.filter-row.mb-5
+  .col-4
+    .stat-card
+      .icon.border--green
+        = image_tag asset_path("icons/icon-user-management-active.png"), height: 20
+      .stat
+        h5.stat-count.text-green = @total_active_user
+        p.stat-label = t("dashboard.home_page.active_user")
+  .col-4
+    .stat-card
+      .icon.border--blue
+        = image_tag asset_path("icons/icon-revenue.png"), height: 30
+      .stat
+        h5.stat-count.text-blue = @total_revenue
+        p.stat-label = t("dashboard.home_page.total_revenue")
+  .col-4
+    .stat-card
+      .icon.border--purple
+        = image_tag asset_path("icons/icon-grow.png"), height: 20
+      .stat
+        h5.stat-count.text-purple = @total_requests
+        p.stat-label = t("dashboard.home_page.request")

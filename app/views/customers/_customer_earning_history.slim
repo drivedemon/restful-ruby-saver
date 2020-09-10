@@ -1,0 +1,14 @@
+table.table.table-card
+  thead
+    tr
+      th = t("dashboard.request_customer.payment_number")
+      th = t("dashboard.customer.name")
+      th = t("dashboard.request_customer.date_time")
+      th = t("dashboard.request_customer.amount")
+      th = t("dashboard.request_customer.description")
+      th = t("dashboard.request_customer.status")
+  tbody.earning-histories id = "earning-histories"
+    = render "customer_earning_history_data"
+#paginator
+  - unless @earning_histories.total_pages == @earning_histories.current_page || @earning_histories.count == 0
+    = link_to t("dashboard.button.load_more"), request.params.except(:controller,:action,:locale).merge(page: @earning_histories.current_page+1), id: "load-more-earning-histories", remote: true

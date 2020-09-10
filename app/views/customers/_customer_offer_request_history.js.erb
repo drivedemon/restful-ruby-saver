@@ -1,0 +1,7 @@
+$("<%= escape_javascript(render "customer_offer_request_history_data", offer_request_histories: @offer_request_histories) %>").appendTo("#offer-request-histories");
+
+<% if @offer_request_histories.total_pages == @offer_request_histories.current_page %>
+  $("#load-more-offer-histories").hide();
+<% else %>
+  $("#load-more-offer-histories").attr("href", "<%== offer_history_customers_path(request.params.except(:controller,:action,:locale).merge(page: @offer_request_histories.current_page+1)) %>");
+<% end %>

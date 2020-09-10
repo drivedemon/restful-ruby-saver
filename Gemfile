@@ -9,10 +9,20 @@ gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
+
+# Use SCSS for stylesheets
+gem 'sass-rails', '>= 6'
+
+# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem 'webpacker', '~> 4.0'
+
+# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
+gem 'turbolinks', '~> 5'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
+gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -33,10 +43,26 @@ gem 'pusher'
 gem 'figaro'
 gem 'fcm'
 gem 'aws-sdk-s3', '~> 1'
+gem 'aws-sdk-ses'
 gem 'will_paginate', '~> 3.1.0'
 gem 'sidekiq'
 gem 'dry-validation'
 gem 'i18n'
+gem 'slim-rails'
+gem 'jquery-rails'
+gem 'json-schema'
+gem 'geocoder'
+gem 'cancancan'
+
+#for flash messages
+gem 'toastr-rails'
+
+#for active link
+gem 'active_link_to'
+
+#for pagination
+gem 'kaminari'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

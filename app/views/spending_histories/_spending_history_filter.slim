@@ -1,0 +1,22 @@
+.row.filter-row.align-items-center x-data="tableFilter()"
+  .col-4
+    h5.user-count = t("dashboard.spending_history.showing_spending", number: @total_spending_histories_count)
+  .col-8
+    .filter-list
+      span
+        = t("dashboard.dashboard_user.filter_by")
+      .filter-box#datepicker
+        span.datepicker-input = t("dashboard.dashboard_user.date_created")
+      .filter-box
+        select.request-amount-filter x-model="amount" @change="appendQueryUrl"
+          option[value="" name="amount"] = t("dashboard.button.amount")
+          option[value="asc" name="low_to_high"] = t("dashboard.button.low_to_high")
+          option[value="desc" name="high_to_low"] = t("dashboard.button.high_to_low")
+      .filter-box
+        select.status-filter x-model="status" @change="appendQueryUrl"
+          option[value="" name="status"] = t("dashboard.button.status")
+          option[value="1" name="1"] = t("dashboard.button.pending")
+          option[value="2" name="2"] = t("dashboard.button.confirmed")
+          option[value="3" name="3"] = t("dashboard.button.completed")
+      .filter-box @click="clearFilter()"
+        | X

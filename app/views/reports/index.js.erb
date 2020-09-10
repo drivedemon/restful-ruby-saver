@@ -1,0 +1,8 @@
+$("<%= escape_javascript(render "report", reports: @reports) %>").appendTo("#report-users");
+$(".user-count").text("<%= t("dashboard.dashboard_user.showing_users", number: @total_reports_count) %>")
+
+<% if @reports.total_pages == @reports.current_page %>
+  $("#load-more-report-users").hide();
+<% else %>
+  $("#load-more-report-users").attr("href", "<%== reports_path(request.params.except(:controller,:action,:locale).merge(page: (@reports.current_page+1))) %>");
+<% end %>

@@ -12,3 +12,5 @@ Aws.config.update(
 )
 
 S3_BUCKET = Aws::S3::Resource.new.bucket(Rails.application.credentials[:aws][:bucket_name])
+
+S3_CLIENT = Aws::S3::Client.new(region: Rails.application.credentials[:aws][:region])

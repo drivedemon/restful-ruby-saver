@@ -1,0 +1,27 @@
+.devise-sessions.new {
+  background-color: var(--ion-color-dark);
+
+  .header-login {
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .container.login-form {
+    background-color: var(--ion-color-white);
+    box-shadow: 0 0 8px 0 var(--ion-color-shadow);
+    width: 416px;
+    padding: 40px;
+
+    .btn.submit-btn {
+      background-color: var(--ion-color-success);
+      color: var(--ion-color-white);
+    }
+
+    .forgot-password-btn {
+      color: var(--ion-color-success);
+      white-space: nowrap;
+    }
+  }
+}

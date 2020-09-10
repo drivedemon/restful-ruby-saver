@@ -1,0 +1,8 @@
+$("<%= escape_javascript(render "customer", users: @users) %>").appendTo("#customer-users");
+$(".user-count").text("<%= "Showing #{@total_users_count} users" %>")
+
+<% if @users.total_pages == @users.current_page %>
+  $("#load-more-customers").hide();
+<% else %>
+  $("#load-more-customers").attr("href", "<%== customers_path(request.params.except(:controller,:action,:locale).merge(page: @users.current_page+1)) %>");
+<% end %>

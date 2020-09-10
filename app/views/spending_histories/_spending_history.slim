@@ -1,0 +1,21 @@
+- @spending_histories.each do |spending_history|
+  tr id="#{spending_history.id}"
+    td
+      a href="javascript:void(0)" x-show="isIncluded(#{spending_history.id})" @click="selectSingleCheckbox(false, #{spending_history.id})"
+        = image_tag asset_path("icons/checkbox-checked.png"), height: "20"
+      a href="javascript:void(0)" x-show="!isIncluded(#{spending_history.id})" @click="selectSingleCheckbox(true, #{spending_history.id})"
+        = image_tag asset_path("icons/checkbox-empty.png"), height: "20"
+    td = spending_history.payment.present? ? spending_history.payment.order_id : "-"
+    td.image-with-name
+      - user = spending_history.user
+      - if user.image_path.present?
+        .avatar-image style="background-image: url(#{user.image_path})"
+      - else
+        .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+      = user.full_name
+    td = spending_history.payment.present? ? format_date_time_view(spending_history.payment.created_at) : "-"
+    td = "#{format_currency(spending_history.price)} (#{format_currency(spending_history.payment.amount)})"
+    td.table__description = spending_history.description.presence || "-"
+    td
+      span class="status status--#{spending_history.status}"
+        = spending_history.status

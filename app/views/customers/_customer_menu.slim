@@ -1,0 +1,13 @@
+.tab-menu x-data="tabMenu()"
+  = link_to request_history_customers_path(@user) do
+    span :class="{'active': checkActiveMenu('request_history')}"
+      = t("dashboard.customer.request_history") 
+  = link_to offer_history_customers_path(@user) do
+    span :class="{'active': checkActiveMenu('offer_history')}"
+      = t("dashboard.customer.offer_history")
+  = link_to earning_history_customers_path(@user) do
+    span :class="{'active': checkActiveMenu('earning_history')}"
+      = t("dashboard.customer.earning_history")
+  = link_to spending_history_customers_path(@user) do
+    span :class="{'active': checkActiveMenu('spending_history')}"
+      = t("dashboard.customer.spending_history")

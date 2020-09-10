@@ -1,0 +1,27 @@
+.container
+  = render "dashboard_user_header"
+  = render "dashboard_user_filter"
+
+  table.table.table-card id="dashboard-users-table" x-data="tableFilter()"
+    thead
+      tr
+        th 
+          = t("dashboard.dashboard_user.name")
+          a href="javascript:void(0)" class="ml-1" @click="orderTable('name')"
+            = image_tag asset_path("icons/icon-sort.png"), class: "ml-1", height: "20"
+        th = t("dashboard.dashboard_user.username")
+        th = t("dashboard.dashboard_user.email")
+        th 
+          = t("dashboard.dashboard_user.role")
+          a href="javascript:void(0)" class="ml-1" @click="orderTable('role')"
+            = image_tag asset_path("icons/icon-sort.png"), class: "ml-1", height: "20"
+        th 
+          = t("dashboard.dashboard_user.date_created")
+          a href="javascript:void(0)" class="ml-1" @click="orderTable('created_at')"
+            = image_tag asset_path("icons/icon-sort.png"), class: "ml-1", height: "20"
+        th = t("dashboard.dashboard_user.action")
+    tbody.dashboard-user id = "dashboard-users"
+      = render @dashboard_users
+  #paginator
+    - unless @dashboard_users.total_pages == @dashboard_users.current_page || @dashboard_users.count == 0
+      = link_to t("dashboard.dashboard_user.load_more"), dashboard_users_path(request.params.except(:controller,:action,:locale).merge(page: (@dashboard_users.current_page+1))), id: "load-more-dashboard-users", remote: true

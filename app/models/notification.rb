@@ -1,16 +1,17 @@
 class Notification < ApplicationRecord
-  ACCEPT_OFFER_TITLE = 'accepted your offer'.freeze
-  CONFIRM_ACCEPT_TITLE = 'confirmed to help on your request'.freeze
-  COMPLETE_HELP_REQUEST_TITLE = 'completed to help on your request'.freeze
-  COMPLETE_OFFER_TITLE = 'completed to help on your offer'.freeze
-  HELP_REQUEST_TITLE = 'needs help!'.freeze
-  OFFER_REQUEST_TITLE = 'offered help on your request'.freeze
-  RATING_TITLE = 'give you rating and some notes'.freeze
-  START_CONVERSATION_TITLE = 'invited you to join a private conversation'.freeze
+  ACCEPT_OFFER_TITLE = I18n.t("notification_mobile.notification.accept_your_offer")
+  CONFIRM_ACCEPT_TITLE = I18n.t("notification_mobile.notification.confirmed_to_help")
+  COMPLETE_HELP_REQUEST_TITLE = I18n.t("notification_mobile.notification.completed_to_help_request")
+  COMPLETE_OFFER_TITLE = I18n.t("notification_mobile.notification.completed_to_help_offer")
+  HELP_REQUEST_TITLE = I18n.t("notification_mobile.notification.need_help")
+  OFFER_REQUEST_TITLE = I18n.t("notification_mobile.notification.offered_help_on_your_request")
+  RATING_TITLE = I18n.t("notification_mobile.notification.give_rate")
+  START_CONVERSATION_TITLE = I18n.t("notification_mobile.notification.invited_join")
 
-  CANCEL_OTHER_OFFER_TITLE = 'cancelled to accept help from you'
-  CANCEL_ACCEPT_TITLE = 'rejected to accept confirmed from you'
-  REJECT_TITLE = 'has chosen to accept help from another Helper. This request is no longer open to offers of help'.freeze
+  CANCAL_AN_OFFER_TITLE = I18n.t("notification_mobile.notification.cancelled_offer")
+  CANCEL_OTHER_OFFER_TITLE = I18n.t("notification_mobile.notification.cancelled_accept")
+  CANCEL_ACCEPT_TITLE = I18n.t("notification_mobile.notification.rejected_accept")
+  REJECT_TITLE = I18n.t("notification_mobile.notification.chosen_another_helper")
 
   GREEN_LEVEL_MESSAGE = 'Normal'
   YELLOW_LEVEL_MESSAGE = 'Assistance'
@@ -44,6 +45,8 @@ class Notification < ApplicationRecord
         "#{set_font_bold_syntax(offer_request.owned_help_request_user.username)} #{CANCEL_OTHER_OFFER_TITLE}"
       elsif is_offer_rejected
         "#{set_font_bold_syntax(offer_request.owned_help_request_user.username)} #{CANCEL_ACCEPT_TITLE}"
+      elsif is_offer_cancelled
+        "#{set_font_bold_syntax(offer_request.user.username)} #{CANCAL_AN_OFFER_TITLE}"
       else
         "#{set_font_bold_syntax(offer_request.user.username)} #{OFFER_REQUEST_TITLE}"
       end

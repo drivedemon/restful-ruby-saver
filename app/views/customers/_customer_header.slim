@@ -1,0 +1,13 @@
+.row.heading
+  .col-9
+    h2  = t("dashboard.navbar.user_management")
+  .col-3
+    .d-flex.justify-content-end
+      button.btn.btn-export = t("dashboard.button.export")
+      .dropdown
+        button class="btn btn-export dropdown-toggle px-2" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+        .dropdown-menu.dropdown-menu-right aria-labelledby="dropdownMenuLink"
+          a class="dropdown-item" href="javascript:void(0)" @click="exportAll('#{export_csv_information_customers_path(2)}')"
+            = t("dashboard.button.export_all")
+          a class="dropdown-item" href="javascript:void(0)" @click="exportSelectedList('#{export_csv_information_customers_path(2)}')"
+            = t("dashboard.button.export_selected")

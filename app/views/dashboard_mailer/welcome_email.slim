@@ -1,0 +1,7 @@
+p Hello #{@user.first_name} #{@user.last_name}!
+p Your account has been successfully created. 
+p Your username is: #{@user.username}
+p Your password is: #{@password}
+p You can log in through the link below.
+p= link_to 'Sign In', new_dashboard_user_session_url
+p If you didn't request this, please ignore this email.

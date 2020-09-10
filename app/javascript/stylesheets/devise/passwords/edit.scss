@@ -1,0 +1,19 @@
+body.devise-passwords.edit {
+  background-color: #5b6168;
+  .header-change-password {
+    font-family: NunitoBold;
+    font-size: 20px;
+  }
+  .container.edit-password-form {
+    background-color: #ffffff;
+    width: 416px;
+    height: 380px;
+    .btn.change-pass-btn {
+      background-color: #03d182;
+      color: #ffffff;
+    }
+    .back-sign-in {
+      color: #03d182;
+    }
+  }
+}

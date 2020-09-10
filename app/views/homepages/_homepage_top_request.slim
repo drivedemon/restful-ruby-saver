@@ -1,0 +1,11 @@
+- @top_requests.each do |request|
+  tr
+    td
+      span class="level level--#{color_to_level(request.color_status)}"
+        span.mr-1 •
+        = color_to_level(request.color_status)
+    td.table__description = request.description
+    td = request.price
+    td
+      span class="status status--#{request.status}"
+        = request.status

@@ -1,5 +1,6 @@
 class Api::NotificationViewsController < Api::User::ApplicationController
   before_action :set_notification, only: [:update]
+  after_action :set_notification, only: [:update]
   before_action :trigger_remove_notification, only: [:update]
   before_action :set_notification_show, only: [:index]
 
@@ -16,6 +17,7 @@ class Api::NotificationViewsController < Api::User::ApplicationController
   end
 
   def destroy
+    notify_pusher(current_user.notifications.count)
     current_user.notifications.destroy_all
     current_user.notifications.with_deleted.destroy_all
 
@@ -32,7 +34,11 @@ class Api::NotificationViewsController < Api::User::ApplicationController
 
   def trigger_remove_notification
     return if @notification[:is_read] == notification_params[:is_read]
-    Pusher.trigger("user-#{current_user.id}", "remove-notifications", nil)
+    notify_pusher
+  end
+
+  def notify_pusher(count_data = nil)
+    Pusher.trigger("user-#{current_user.id}", "remove-notifications", count_data)
   end
 
   # Use callbacks to setup show method.

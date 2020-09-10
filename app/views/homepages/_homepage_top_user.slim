@@ -1,0 +1,10 @@
+- @top_users.each do |user|
+  tr
+    td
+      .image-with-name
+        - if user.first.image_path.present?
+          .avatar-image style="background-image: url(#{user.first.image_path})"
+        - else
+          .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+        = user.first.full_name
+    td = "#{user.last} help"

@@ -1,0 +1,96 @@
+.container x-data="rating()"
+  .row
+    .col-7
+      .breadcrumb
+        = link_to t("dashboard.navbar.report"), reports_path, class: "font-weight-bold"
+        span.ml-1
+          | >
+          = @report.reported_to_user.full_name
+    .col-5.text-right x-data="tableFilter()"
+      .d-flex.justify-content-end
+        = link_to t("dashboard.button.ban_user"), report_path(@report), method: :delete, data: { confirm: 'Are you certain you want to delete this?' }, class: "btn btn-danger mr-4"
+        button.btn.btn-export = t("dashboard.button.export")
+        .dropdown
+          button class="btn btn-export dropdown-toggle px-2" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+          .dropdown-menu.dropdown-menu-right aria-labelledby="dropdownMenuLink"
+            a class="dropdown-item" href="javascript:void(0)" @click="exportUserHistory('#{export_csv_information_reports_path}', 'report_history')"
+              = t("dashboard.button.export_csv")
+
+    .col-5
+      .content-box.mb-5 style="min-height: 300px"
+        .row
+          .col-12.mb-2
+            - if @report.reported_to_user.image_path.present?
+              .profile-image.m-auto style="background-image: url(#{@report.reported_to_user.image_path})"
+            - else
+              .profile-image.m-auto style="background-image: url(#{asset_path("saver-logo.png")})"
+
+          .col-12.text-center
+            span.font-weight-bold = @report.reported_to_user.full_name
+          .col-12.text-center.mb-3
+            span x-html="getRatingStar(#{@report.reported_to_user.rates.average(:score).to_i})"
+            span.font-weight-bold.ml-1 = @report.reported_to_user.rates.average(:score).to_i
+          .col-4.text-center.border-right
+            h5.font-weight-bold.nowrap = @report.reported_to_user.help_requests.count
+          .col-4.text-center.border-right
+            h5.font-weight-bold.nowrap = "#{total_amount_of_user(@report.reported_to_user.offer_requests_accepted.pluck(:price))} kr"
+          .col-3.text-center
+            h5.font-weight-bold.nowrap = "#{total_amount_of_user(@report.reported_to_user.help_requests.pluck(:price))} kr"
+          .col-4.text-center
+            span.text-muted. = t("dashboard.request_customer.post")
+          .col-4.text-center
+            span.text-muted = t("dashboard.request_customer.earning")
+          .col-4.text-center
+            span.text-muted = t("dashboard.request_customer.spending")
+
+    .col-7
+      .content-box.mb-5 style="min-height: 300px"
+        .row.mb-4
+          .col-12
+            h2 = t("dashboard.user_information.contact_information")
+          br/
+          .col-4
+            span.text-muted = t("dashboard.user_information.email")
+          .col-4
+            span.text-muted = t("dashboard.user_information.telephone")
+          .col-4
+            span.text-muted = t("dashboard.user_information.username")
+          .col-4
+            p.font-weight-bold = @report.reported_to_user.email
+          .col-4
+            p.font-weight-bold = @report.reported_to_user.telephone
+          .col-4
+            p.font-weight-bold = @report.reported_to_user.username
+        .row
+          .col-4
+            span.text-muted = t("dashboard.user_information.profession")
+          .col-4
+            span.text-muted = t("dashboard.user_information.status")
+          .col-4
+            span.text-muted = t("dashboard.user_information.created_date")
+          .col-4
+            p.font-weight-bold = @report.reported_to_user.profession.name
+          .col-4
+            span.status.status--green = @report.reported_to_user.status
+          .col-4
+            p.font-weight-bold = format_date_view(@report.reported_to_user.created_at)
+
+  .container.pt-0
+    .tab-menu x-data="tabMenu()"
+      = link_to report_path(@report) do
+        span.active
+          = t("dashboard.report.report_history")
+
+    table.table.table-card id="reports-table"
+      thead
+        tr
+          th.text-center = t("dashboard.report.reported_by")
+          th.text-center = t("dashboard.report.date_and_time")
+          th.text-center = t("dashboard.report.reason")
+          th.text-center = t("dashboard.report.request_description")
+          th.text-center = t("dashboard.report.action")
+      tbody.report-history id = "report-histories"
+        = render "report_detail"
+    #paginator
+      - unless @report_history.total_pages == @report_history.current_page || @report_history.count == 0
+        = link_to t("dashboard.button.load_more"), request.params.except(:controller,:action,:locale).merge(page: @report_history.current_page+1), id: "load-more-report-histories", remote: true

@@ -1,11 +1,11 @@
 class Api::HelpRequestsController <  Api::User::ApplicationController
   after_action :add_request_view_after_show, only: [:show]
-  before_action :update_user_location, only: [:index]
   before_action :set_help_request_show, only: [:show]
   before_action :set_help_request, only: [:update, :destroy]
   before_action :update_help_request_status, only: [:destroy]
 
   include MergeImageParam
+  include DashboardNotificationTrigger
 
   # GET /help_requests
   def index
@@ -53,6 +53,7 @@ class Api::HelpRequestsController <  Api::User::ApplicationController
     )
     if @help_request.save
       add_or_remove_image_related_model(@help_request.image_help_requests, params[:images])
+      store_and_trigger_notification_job(:new_help_request, {new_request_id: @help_request.id})
       render json: @help_request, status: :created
     else
       render json: @help_request.errors, status: :unprocessable_entity
@@ -104,6 +105,6 @@ class Api::HelpRequestsController <  Api::User::ApplicationController
   end
 
   def update_help_request_status
-    @help_request.update(status: :rejected)
+    @help_request.update(status: :cancelled)
   end
 end

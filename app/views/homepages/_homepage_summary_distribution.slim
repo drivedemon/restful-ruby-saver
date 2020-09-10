@@ -1,0 +1,24 @@
+.row.filter-row
+  .col-12
+    h2 = t("dashboard.home_page.request_distribution")
+  .col-4
+    .stat-card
+      .icon.border--green
+        = image_tag asset_path("icons/icon-normal-request.png"), height: "30"
+      .stat
+        h5.stat-count.text-green = @tolal_green_requests
+        p.stat-label = t("dashboard.home_page.normal_request")
+  .col-4
+    .stat-card
+      .icon.border--orange
+        = image_tag asset_path("icons/icon-assistance@1x.png"), height: "30"
+      .stat
+        h5.stat-count.text-orange = @tolal_yellow_requests
+        p.stat-label = t("dashboard.home_page.assist_request")
+  .col-4
+    .stat-card
+      .icon.border--red
+        = image_tag asset_path("icons/icon-urgent-request.png"), height: "30"
+      .stat
+        h5.stat-count.text-red = @tolal_red_requests
+        p.stat-label = t("dashboard.home_page.urgent_request")

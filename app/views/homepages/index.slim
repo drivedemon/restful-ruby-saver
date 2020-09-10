@@ -1,0 +1,28 @@
+.container
+  = render "homepage_filter"
+  = render "homepage_summary"
+  = render "homepage_header_table"
+
+  .row.filter-row.mb-5
+    .col-8
+      .content-box
+        table.table
+          thead
+            tr
+              th = t("dashboard.home_page.level")
+              th = t("dashboard.home_page.description")
+              th = t("dashboard.home_page.amount")
+              th = t("dashboard.home_page.status")
+          tbody
+            = render "homepage_top_request", users: @top_requests
+    .col-4
+      .content-box
+        table.table
+          thead
+            tr
+              th = t("dashboard.home_page.name")
+              th = t("dashboard.home_page.request")
+          tbody
+            = render "homepage_top_user", users: @top_users
+
+  = render "homepage_summary_distribution"

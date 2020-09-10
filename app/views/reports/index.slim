@@ -1,0 +1,35 @@
+.container x-data="tableFilter()"
+  = render "report_header"
+  = render "report_filter"
+
+  table.table.table-card id="report-users-table"
+    thead
+      tr
+        th
+          a href="javascript:void(0)" @click="selectAllCheckbox('report-users')" x-show="!isSelectAll"
+            = image_tag asset_path("icons/checkbox-empty.png"), height: "20"
+          a href="javascript:void(0)" @click="selectAllCheckbox('report-users')" x-show="isSelectAll"
+            = image_tag asset_path("icons/checkbox-checked.png"), height: "20"
+        th = t("dashboard.report.name")
+        th = t("dashboard.report.reason")
+        th = t("dashboard.report.date_time")
+        th = t("dashboard.report.reported_by")
+        th = t("dashboard.report.status")
+        th = t("dashboard.report.action")
+    tbody.report-user id = "report-users"
+      = render "report"
+  #paginator
+    - unless @reports.total_pages == @reports.current_page || @reports.count == 0
+      = link_to t("dashboard.button.load_more"), request.params.except(:controller,:action,:locale).merge(page: @reports.current_page+1), id: "load-more-report-users", remote: true
+
+  .item-selection-box :class="{'show': selectedDataList.length}"
+    .row.align-items-center
+      .col-6
+        a href="javascript:void(0)" class="close-btn mr-3" @click="clearSelectAll"
+          | X
+        span x-text="`${selectedDataList.length} items selected`"
+      .col-6.text-right
+        btn class="btn btn-round btn-round--dark mr-3" @click="exportSelectedList('#{export_csv_reports_path}')"
+          = t("dashboard.button.export")
+        btn class="btn btn-round btn-round--danger"
+          = t("dashboard.button.delete")

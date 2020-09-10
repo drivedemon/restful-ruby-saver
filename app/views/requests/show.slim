@@ -1,0 +1,97 @@
+.container x-data="rating()"
+  .row
+    .col-7
+      .breadcrumb
+        = link_to t("dashboard.navbar.request"), requests_path, class: "font-weight-bold"
+        span.ml-1
+          | >
+          = t("dashboard.navbar.request")
+          | #
+          = @help_request.id
+    .col-5.text-right x-data="tableFilter()"
+      .d-flex.justify-content-end
+        - if can? :destroy, :request
+          = link_to t("dashboard.button.block_request"), request_path(@help_request), method: :delete, data: { confirm: 'Are you certain you want to delete this?' }, class: "btn btn-danger mr-4"
+        button.btn.btn-export = t("dashboard.button.export")
+        .dropdown
+          button class="btn btn-export dropdown-toggle px-2" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+          .dropdown-menu.dropdown-menu-right aria-labelledby="dropdownMenuLink"
+            a class="dropdown-item" href="javascript:void(0)" @click="exportUserHistory('#{export_csv_information_requests_path}', 'request_history')"
+              = t("dashboard.button.export_csv")
+
+    .col-5
+      .content-box.mb-5 style="min-height: 300px"
+        .row
+          .col-12.mb-2
+            - if @help_request.user.image_path.present?
+              .profile-image.m-auto style="background-image: url(#{@help_request.user.image_path})"
+            - else
+              .profile-image.m-auto style="background-image: url(#{asset_path("saver-logo.png")})"
+
+          .col-12.text-center
+            span.font-weight-bold = @help_request.user.full_name
+          .col-12.text-center.mb-3
+            span x-html="getRatingStar(#{@help_request.user.rates.average(:score).to_i})"
+            span.font-weight-bold.ml-1 = @help_request.user.rates.average(:score).to_i
+          .col-4.text-center.border-right
+            h5.font-weight-bold.nowrap = @help_request.user.help_requests.count
+          .col-4.text-center.border-right
+            h5.font-weight-bold.nowrap = "#{total_amount_of_user(@help_request.user.offer_requests_accepted.pluck(:price))} kr"
+          .col-3.text-center
+            h5.font-weight-bold.nowrap = "#{total_amount_of_user(@help_request.user.help_requests.pluck(:price))} kr"
+          .col-4.text-center
+            span.text-muted. = t("dashboard.request_customer.post")
+          .col-4.text-center
+            span.text-muted = t("dashboard.request_customer.earning")
+          .col-4.text-center
+            span.text-muted = t("dashboard.request_customer.spending")
+
+    .col-7
+      .content-box.mb-5 style="min-height: 300px"
+        .row.mb-4
+          .col-12
+            h2 = t("dashboard.user_information.contact_information")
+          br/
+          .col-4
+            span.text-muted = t("dashboard.user_information.email")
+          .col-4
+            span.text-muted = t("dashboard.user_information.telephone")
+          .col-4
+            span.text-muted = t("dashboard.user_information.username")
+          .col-4
+            p.font-weight-bold = @help_request.user.email
+          .col-4
+            p.font-weight-bold = @help_request.user.telephone
+          .col-4
+            p.font-weight-bold = @help_request.user.username
+        .row
+          .col-4
+            span.text-muted = t("dashboard.user_information.profession")
+          .col-4
+            span.text-muted = t("dashboard.user_information.status")
+          .col-4
+            span.text-muted = t("dashboard.user_information.created_date")
+          .col-4
+            p.font-weight-bold = @help_request.user.profession.name
+          .col-4
+            span.status.status--green = @help_request.user.status
+          .col-4
+            p.font-weight-bold = format_date_view(@help_request.user.created_at)
+
+    = render "request_detail"
+
+    .col-12
+      h2 = t("dashboard.request_customer.helper_information")
+
+    table.table.table-card id="offer-requests-table"
+      thead
+        tr
+          th.text-center = t("dashboard.dashboard_user.name")
+          th.text-center = t("dashboard.dashboard_user.email")
+          th.text-center = t("dashboard.dashboard_user.earning")
+          th.text-center = t("dashboard.dashboard_user.spending")
+          th.text-center = t("dashboard.dashboard_user.rate")
+          th.text-center = t("dashboard.request_customer.status")
+          th.text-center = t("dashboard.dashboard_user.action")
+      tbody.request-user id = "request-users"
+        = render "request_offer_detail"

@@ -1,0 +1,19 @@
+.container.edit-password-form.d-flex.align-items-center.flex-column.p-4
+  .header-change-password = t("dashboard.edit_password.change_password") 
+  = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "d-flex flex-grow-1 flex-column w-100 justify-content-center align-items-center" }) do |f|
+    - devise_error_messages!
+    = f.hidden_field :reset_password_token
+    .field.w-75
+      = f.label :password, t("dashboard.edit_password.new_password")
+      br/
+      - if @minimum_password_length
+        em = t("dashboard.edit_password.minimum_characters", character_count: @minimum_password_length)
+        br/
+      = f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control mb-4"
+    .field.w-75
+      = f.label :password_confirmation, t("dashboard.edit_password.confirm_new_password")
+      br/
+      = f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control mb-4"
+    .actions
+      = f.submit t("dashboard.edit_password.change_my_password"), class: "btn change-pass-btn"
+  = link_to t("dashboard.forgot_password.back_to_sign_in"), new_session_path(resource_name), class: "back-sign-in"

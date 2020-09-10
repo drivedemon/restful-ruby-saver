@@ -1,4 +1,4 @@
-class Api::List::ProfessionsController < ApplicationController
+class Api::List::ProfessionsController < ApiApplicationController
   def index
     render json: Profession.all
   end

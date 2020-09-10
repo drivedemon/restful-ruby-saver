@@ -1,0 +1,36 @@
+.container x-data="tableFilter()"
+  = render "request_header"
+  = render "request_filter"
+
+  table.table.table-card id="request-users-table"
+    thead
+      tr
+        th
+          a href="javascript:void(0)" @click="selectAllCheckbox('request-users')" x-show="!isSelectAll"
+            = image_tag asset_path("icons/checkbox-empty.png"), height: "20"
+          a href="javascript:void(0)" @click="selectAllCheckbox('request-users')" x-show="isSelectAll"
+            = image_tag asset_path("icons/checkbox-checked.png"), height: "20"
+        th = t("dashboard.request_customer.level")
+        th = t("dashboard.request_customer.date_time")
+        th = t("dashboard.request_location.location")
+        th = t("dashboard.request_customer.amount")
+        th = t("dashboard.dashboard_user.name")
+        th = t("dashboard.request_customer.status")
+        th = t("dashboard.dashboard_user.action")
+    tbody.request-user id = "request-users"
+      = render "request"
+  #paginator
+    - unless @help_requests.total_pages == @help_requests.current_page || @help_requests.count == 0
+      = link_to t("dashboard.button.load_more"), request.params.except(:controller,:action,:locale).merge(page: @help_requests.current_page+1), id: "load-more-request-users", remote: true
+
+  .item-selection-box :class="{'show': selectedDataList.length}"
+    .row.align-items-center
+      .col-6
+        a href="javascript:void(0)" class="close-btn mr-3" @click="clearSelectAll"
+          | X
+        span x-text="`${selectedDataList.length} items selected`"
+      .col-6.text-right
+        btn class="btn btn-round btn-round--dark mr-3" @click="exportSelectedList('#{export_csv_requests_by_location_index_path}')"
+          = t("dashboard.button.export")
+        btn class="btn btn-round btn-round--danger"
+          = t("dashboard.button.delete")

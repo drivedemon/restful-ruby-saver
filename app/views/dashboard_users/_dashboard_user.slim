@@ -1,0 +1,14 @@
+tr
+  td.image-with-name
+    - if dashboard_user.avatar.present?
+      .avatar-image style="background-image: url(#{rails_blob_url(dashboard_user.avatar, only_path: true)})"
+    - else
+      .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+    = fullname(dashboard_user.first_name, dashboard_user.last_name)
+  td = dashboard_user.username
+  td = dashboard_user.email
+  td = dashboard_user.role.name
+  td = format_date_view(dashboard_user.created_at)
+  td
+    = link_to dashboard_user_path(dashboard_user) do
+      = image_tag asset_path("icons/icon-view.png"), height: "20", class: "mr-2"

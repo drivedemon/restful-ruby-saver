@@ -5,22 +5,22 @@ class ReportType < Struct.new(:type_ids)
       when :spam
         {
           id: 1,
-          type_id: "It’s suspicious or spam"
+          type_id: I18n.t("notification_mobile.report_type.spam")
         }
       when :pretending
         {
           id: 2,
-          type_id: "They’re pretending to be someone else"
+          type_id: I18n.t("notification_mobile.report_type.pretending")
         }
       when :hateful
         {
           id: 3,
-          type_id: "They’re expressing harmful or hateful content"
+          type_id: I18n.t("notification_mobile.report_type.hateful")
         }
       when :other
         {
           id: 4,
-          type_id: "Others"
+          type_id: I18n.t("notification_mobile.report_type.others")
         }
       end
     end

@@ -1,0 +1,17 @@
+- @spending_histories.each do |spending_history|
+  tr
+    - offer_request = spending_history.offer_requests.first
+    td = spending_history.payment.order_id
+    td.image-with-name
+      - user = offer_request.user
+      - if user.image_path.present?
+        .avatar-image style="background-image: url(#{user.image_path})"
+      - else
+        .avatar-image style="background-image: url(#{asset_path("saver-logo.png")})"
+      = user.full_name
+    td = format_date_time_view(spending_history.payment.created_at)
+    td = format_currency(spending_history.price)
+    td.table__description = spending_history.description
+    td
+      span class="status status--#{spending_history.status}"
+        = spending_history.status

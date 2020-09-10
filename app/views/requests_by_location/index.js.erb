@@ -1,0 +1,8 @@
+$("<%= escape_javascript(render "request", users: @help_requests) %>").appendTo("#request-users");
+$(".user-count").text("<%= t("dashboard.request_customer.showing_requests", number: @total_requests_count) %>")
+
+<% if @help_requests.total_pages == @help_requests.current_page %>
+  $("#load-more-request-users").hide();
+<% else %>
+  $("#load-more-request-users").attr("href", "<%== requests_by_location_index_path(request.params.except(:controller,:action,:locale).merge(page: (@help_requests.current_page+1))) %>");
+<% end %>

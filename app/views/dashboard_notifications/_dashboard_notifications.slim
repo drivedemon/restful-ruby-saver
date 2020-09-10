@@ -1,0 +1,6 @@
+- @unread_notifications.each do |unread_notification|
+  = render partial: "dashboard_notifications/#{unread_notification.notification_type.to_s}", \
+  locals: { \
+  notification_data: unread_notification.notification_data.deep_symbolize_keys, \
+  dashboard_notification_id: unread_notification.id, \
+  dashboard_notification_at: unread_notification.created_at.strftime("%b %d, %Y %l:%M%P")}

@@ -40,9 +40,9 @@ class Api::User::NotificationSettingController <  Api::User::ApplicationControll
 
   def set_default_user_notification_params
     {
-      green_distance_scope: 5,
-      yellow_distance_scope: 15,
-      red_distance_scope: 30,
+      green_distance_scope: 50,
+      yellow_distance_scope: 50,
+      red_distance_scope: 50,
       notification_status: true,
       notification_status_green: true,
       notification_status_yellow: true,

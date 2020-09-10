@@ -1,9 +1,9 @@
 class ChatRoom < ApplicationRecord
-  @@chat_room_topic = 'You can join a private conversation!'
+  CHAT_ROOM_TOPIC = I18n.t("notification_mobile.join_private_conversation")
 
   acts_as_paranoid
 
-  after_save :create_start_conversation_to_chat_room, :create_notify_history, :push_notify_to_user
+  after_commit :create_start_conversation_to_chat_room, :push_notify_to_user, on: [:create, :update]
   belongs_to :help_request, -> { with_deleted }
   belongs_to :offer_request, -> { with_deleted }
   has_many :chats
@@ -34,20 +34,17 @@ class ChatRoom < ApplicationRecord
   end
 
   def create_start_conversation_to_chat_room
-    chats.create(
+    chat = chats.create(
       type: StartChat::MESSAGE,
       user_id: help_request.user_id,
       is_read: true
     )
+    create_notify_history(id, chat.id, offer_request.user_id)
     create_initial_message_from_offer(offer_request.description, offer_request.user_id) if offer_request.description.present?
   end
 
-  def create_notify_history
-    Notification.create(chat_room_id: self.id, chat_id: chats.first.id, user_id: offer_request.user_id)
-  end
-
   def push_notify_to_user
-    FcmNotification.push_notification(@@chat_room_topic, nil, nil, offer_request.user, as_fcm_notification_format) if offer_request.user.notification_status
+    FcmNotification.push_notification(CHAT_ROOM_TOPIC, nil, nil, offer_request.user, as_fcm_notification_format) if offer_request.user.notification_status
   end
 
   def self.notify_pusher_conversation(chat_user_id, chat_count)
@@ -67,5 +64,9 @@ class ChatRoom < ApplicationRecord
       user_id: offer_user_id,
       is_read: true
     )
+  end
+
+  def create_notify_history(id, chat_id, offer_user_id)
+    Notification.create(chat_room_id: id, chat_id: chat_id, user_id: offer_user_id)
   end
 end

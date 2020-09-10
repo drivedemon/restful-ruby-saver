@@ -2,6 +2,20 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
 
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    port: Rails.application.credentials[:aws][:ses][:port],
+    address: Rails.application.credentials[:aws][:ses][:address],
+    user_name:  Rails.application.credentials[:aws][:ses][:smtp_username],
+    password: Rails.application.credentials[:aws][:ses][:smtp_password],
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
+
+  config.action_cable.url = "ws://localhost:3000/cable"
+
+  config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
+
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
