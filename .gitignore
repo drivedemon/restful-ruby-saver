@@ -25,7 +25,16 @@ vendor/bundle
 # Ignore application configuration
 /config/application.yml
 
+/public/assets
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
 
-/config/credentials/staging.key
+# Ignore master key for decrypting credentials and more.
+/config/master.key
 
-/config/credentials/production.key
+# Ignore jetbrain log file
+.idea/
