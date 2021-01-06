@@ -82,8 +82,6 @@ You should install the correct version of ruby with:
 $ rbenv install 2.7.1
 ```
 
-# Run
-
 ## Summary
 
 - Start service dependencies (`docker-compose up -d`)
